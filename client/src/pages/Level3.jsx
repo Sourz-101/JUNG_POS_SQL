@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import TimeLine from "../components/TimeLine";
-import { IoArrowBackSharp } from "react-icons/io5";
+import { IoArrowBackSharp, IoGitMerge } from "react-icons/io5";
 
 const Level3 = () => {
   const { series, category } = useParams();
@@ -18,7 +18,7 @@ const Level3 = () => {
       try {
         const res = await axios.post(
           "http://localhost:9000/api/jung/v1/products/getallcolors",
-          { series: series, category },
+          { series_id: series, category_id: category },
           { withCredentials: true }
         );
 
@@ -50,11 +50,12 @@ const Level3 = () => {
         {color?.map((item, index) => {
           return (
             <Link
-              to={`/select/${series}/${category}/${item}`}
+              to={`/select/${series}/${category}/${item.color_id}`}
               className="rounded-md bg-[#1849A8] p-3 m-2 w-full text-center"
+              key={item.color_id}
             >
               <div key={index} onClick={handleOption}>
-                {item}
+                {item.col_name}
               </div>
             </Link>
           );

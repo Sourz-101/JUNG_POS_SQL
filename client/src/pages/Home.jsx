@@ -76,18 +76,18 @@ const Home = () => {
         <div className="result relative shadow-sm shadow-black w-[1100px]  rounded-lg overflow-y-auto overflow-x-hidden -top-14">
           {resustantData?.map((e) => {
             return (
-              <Link to={`/product/${e._id}`}>
+              <Link to={`/product/${e.prod_id}`} key={e.prod_id}>
                 <div className="w-full bg-white rounded-sm flex justify-around items-center p-2 border-2 cursor-pointer hover:bg-slate-100">
                   <img
-                    src={e.Image}
+                    src={e.photo}
                     alt="img"
                     className="w-12 h-12 object-cover"
                   />
-                  <p className="font-semibold ">{e.Name}</p>
-                  <p className="font-semibold ">{e.Category}</p>
-                  <p className="font-semibold ">Color</p>
-                  <p className="font-semibold ">{e.Quantity}</p>
-                  <p className="font-semibold ">{e["Added Date"]}</p>
+                  <p className="font-semibold ">{e.prod_name}</p>
+                  <p className="font-semibold ">{e.cat_name}</p>
+                  <p className="font-semibold ">{e.col_name}</p>
+                  <p className="font-semibold ">{e.stock}</p>
+                  <p className="font-semibold ">{e.created_at}</p>
                 </div>
               </Link>
             );

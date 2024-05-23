@@ -43,11 +43,11 @@ const Level1 = () => {
         {series?.map((item, index) => {
           return (
             <Link
-              to={`/select/${item}`}
+              to={`/select/${item.series_id}`}
               className="rounded-md bg-[#1849A8] p-3 m-2 w-full text-center"
-              key={index}
+              key={item.series_id}
             >
-              <div onClick={handleOption}>{item}</div>
+              <div onClick={handleOption}>{item.ser_name}</div>
             </Link>
           );
         })}

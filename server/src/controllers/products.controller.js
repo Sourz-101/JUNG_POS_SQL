@@ -45,7 +45,7 @@ const addCDProduct = asyncHandler(async (req, res) => {
 const searchProduct = asyncHandler(async (req, res) => {
   const { inputText } = req.body;
   // console.log(inputText, req.body);
-
+  // Product inserted successfully:
   // const allprodcuts= await Product.find();
   // const products =  allprodcuts.filter((product) => {
   //   const productName = product?.Name?.toString().toLowerCase();
@@ -61,7 +61,9 @@ const searchProduct = asyncHandler(async (req, res) => {
   series.ser_name, 
   product.photo, 
   category.cat_name, 
-  color.col_name
+  color.col_name,
+  product.stock,
+  product.created_at
 FROM 
   product
 JOIN 
@@ -79,8 +81,7 @@ JOIN
         error
       );
     }
-    console.log("Product inserted successfully:");
-    connection.end(); // Close the connection
+    // Close the connection
 
     const allprodcuts = result;
     const products = allprodcuts.filter((product) => {
@@ -93,7 +94,8 @@ JOIN
     if (!products) {
       throw new ApiError(500, "no Prodcut found!!");
     }
-
+console.log("got prodcuts successfully:");
+    
     return res
       .status(200)
       .json(new ApiResponse(201, products, "Found some products!!"));
@@ -149,7 +151,7 @@ const getProductById = asyncHandler(async (req, res) => {
     }
 
     console.log("Product retrieved successfully:", result);
-    connection.end(); // Close the connection
+    // connection.end(); // Close the connection
 
     return res
       .status(200)

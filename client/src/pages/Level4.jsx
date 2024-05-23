@@ -14,7 +14,7 @@ const Level4 = () => {
       try {
         const res = await axios.post(
           "http://localhost:9000/api/jung/v1/products/getfinalproductlist",
-          { series: series, category, color },
+          { series_id: series, category_id:category, color_id:color },
           { withCredentials: true }
         );
 
@@ -46,10 +46,10 @@ const Level4 = () => {
         {products?.map((item, index) => {
           return (
             <Link
-              to={`/select/${series}/${category}/${color}/${item._id}`}
+              to={`/select/${series}/${category}/${color}/${item.prod_id}`}
               className="rounded-md bg-[#1849A8] p-3 m-2 w-full text-center"
             >
-              <div key={index._id}>{item.Name}</div>
+              <div key={index._id}>{item.prod_name}</div>
             </Link>
           );
         })}

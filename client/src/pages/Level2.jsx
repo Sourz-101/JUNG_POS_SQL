@@ -19,7 +19,7 @@ const Level2 = () => {
       try {
         const res = await axios.post(
           "http://localhost:9000/api/jung/v1/products/getallcategories",
-          { series: series },
+          { series_id: series },
           { withCredentials: true }
         );
 
@@ -48,11 +48,11 @@ const Level2 = () => {
         {categories.map((item, index) => {
           return (
             <Link
-              to={`/select/${series}/${item}`}
-              className="rounded-md bg-[#1849A8] p-3 m-2 w-full text-center"
+              to={`/select/${series}/${item.category_id}`}
+              className="rounded-md bg-[#1849A8] p-3 m-2 w-full text-center" key={item.category_id}
             >
               <div key={index} onClick={handleOption}>
-                {item}
+                {item.cat_name}
               </div>
             </Link>
           );
