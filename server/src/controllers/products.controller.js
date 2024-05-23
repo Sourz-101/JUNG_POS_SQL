@@ -3,6 +3,9 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { Product } from "../models/products.model.js";
 import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
+import { sqlDatabase } from "../db/sql.config.js";
+
+const connection= sqlDatabase();
 
 const getAllCDProducts = asyncHandler(async (req, res) => {
   const cdProducts = await Product.find();
@@ -71,18 +74,30 @@ const getProductById= asyncHandler(async(req,res)=>{
 
 
 const getAllSeries= asyncHandler(async(req,res)=>{
-  const uniqueSeries= await Product.aggregate([
-    {
-      $group: {
-        _id: null,
-        "allSeries":{$addToSet:"$Series"}
-      },
-    },
-  ])
+  // const uniqueSeries= await Product.aggregate([
+  //   {
+  //     $group: {
+  //       _id: null,
+  //       "allSeries":{$addToSet:"$Series"}
+  //     },
+  //   },
+  // ])
 
-  if(!uniqueSeries) throw new ApiError(500, "Something went worng in getting series!!")
+  // if(!uniqueSeries) throw new ApiError(500, "Something went worng in getting series!!")
 
-    return res.status(200).json(new ApiResponse(201, uniqueSeries[0].allSeries, "Got All Series!!"))
+  //   return res.status(200).json(new ApiResponse(201, uniqueSeries[0].allSeries, "Got All Series!!"))
+
+  ///****************sql code */
+
+  const query = `select distinct series.ser_name, product.series_id from product inner join series on product.series_id = series.ser_id`;
+
+    connection.query(query, (error, result) => {
+      if (error) throw new ApiError(500, "no data found by sql");
+
+      console.log(result);
+
+      return res.json(result);
+    });
 })
 
 const getAllCategoriesOfAseries= asyncHandler(async(req,res)=>{
