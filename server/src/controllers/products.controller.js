@@ -72,7 +72,7 @@ const getProductById= asyncHandler(async(req,res)=>{
   return res.status(200).json(new ApiResponse(201, product, "Got the prodcut"))
 })
 
-
+//done
 const getAllSeries= asyncHandler(async(req,res)=>{
   // const uniqueSeries= await Product.aggregate([
   //   {
@@ -92,68 +92,102 @@ const getAllSeries= asyncHandler(async(req,res)=>{
   const query = `select distinct series.ser_name, product.series_id from product inner join series on product.series_id = series.ser_id`;
 
     connection.query(query, (error, result) => {
-      if (error) throw new ApiError(500, "no data found by sql");
+      if (error) throw new ApiError(500, "no data found by sql" + error);
 
       console.log(result);
 
-      return res.json(result);
+      return res.status(200).json(new ApiResponse(201, result, "Got All Series!!"))
     });
 })
 
+//done
 const getAllCategoriesOfAseries= asyncHandler(async(req,res)=>{
-  const {series}=req.body;
+  const {series_id}=req.body;
 
-  if(series==='' || !series) throw new ApiError(500, "Series Required!!")
+  if(series_id===0 || !series_id) throw new ApiError(500, "Series  Required!!")
 
-  console.log(series);
+  console.log(series_id);
 
 
-  const allCategories= await Product.aggregate([
-    {
-      $match: {
-        Series:series
-      }
-    },
-    {
-      $group:{
-        _id:null,
-        "cat":{$addToSet:"$Category"}
-      }
-    }
-  ]);
+  // const allCategories= await Product.aggregate([
+  //   {
+  //     $match: {
+  //       Series:series
+  //     }
+  //   },
+  //   {
+  //     $group:{
+  //       _id:null,
+  //       "cat":{$addToSet:"$Category"}
+  //     }
+  //   }
+  // ]);
 
-  if(!allCategories) throw new ApiError(500, "Something went wrong in fetching categories!!")
+  // if(!allCategories) throw new ApiError(500, "Something went wrong in fetching categories!!")
 
-  return res.status(200).json(new ApiResponse(201, allCategories[0].cat, `Got All Categories of ${series}!!`))
+  // return res.status(200).json(new ApiResponse(201, allCategories[0].cat, `Got All Categories of ${series}!!`))
+
+
+  /////********************* sql code */
+
+  const query = `select distinct category.cat_name, product.category_id from product inner join category on product.category_id = category.cat_id where product.series_id = ${series_id}`;
+
+    connection.query(query, (error, result) => {
+      if (error) throw new ApiError(500, "somehting went worinng in sql "+ error);
+
+      console.log(result);
+
+      res.status(200).json(new ApiResponse(201, result, `Got All Categories of ${series_id}!!`))
+    });
 })
 
 
 const getAllColors= asyncHandler(async(req,res)=>{
-  const {series, category} = req.body;
+  const {series_id, category_id} = req.body;
 
 
-  if([series, category].some(fields=>fields?.trim()==="")){
-    throw new ApiError(500, "series and Category Required!!")
-  }
+  // if([series, category].some(fields=>fields?.trim()==="")){
+  //   throw new ApiError(500, "series and Category Required!!")
+  // }
 
-  const allColors= await Product.aggregate([
-    {
-      $match:{
-        Series:series,
-        Category:category
-      }
-    },
-    {
-      $group:{
-        _id:null,
-        "allColors":{$addToSet: "$Color"}
-      }
-    }
-  ])
+  // const allColors= await Product.aggregate([
+  //   {
+  //     $match:{
+  //       Series:series,
+  //       Category:category
+  //     }
+  //   },
+  //   {
+  //     $group:{
+  //       _id:null,
+  //       "allColors":{$addToSet: "$Color"}
+  //     }
+  //   }
+  // ])
 
-  if(!allColors) throw new ApiError(500, "Something went wrong in fetching colors!!")
+  // if(!allColors) throw new ApiError(500, "Something went wrong in fetching colors!!")
 
-  return res.status(200).json(new ApiResponse(201, allColors[0].allColors, "Got All Colors!!"))
+  // return res.status(200).json(new ApiResponse(201, allColors[0].allColors, "Got All Colors!!"))
+
+
+  ///************ sql code */
+
+  if(!series_id || !category_id) throw new ApiError(500, "sereis and category are required!!")
+
+  const query = `
+    SELECT DISTINCT color.col_name, product.color_id
+    FROM product
+    INNER JOIN color ON product.color_id = color.col_id
+    WHERE product.series_id = ${series_id} AND product.category_id = ${category_id}`;
+
+    connection.query(query, (error, result) => {
+      if (error) throw new ApiError(500, "somehting went worinng in sql "+ error);
+
+      console.log(result);
+
+      return res.status(200).json(new ApiResponse(201, result, "Got All Colors!!"))
+    });
+
 })
 
 // ######only for editing product data during development
