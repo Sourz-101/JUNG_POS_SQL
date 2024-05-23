@@ -59,17 +59,59 @@ const searchProduct = asyncHandler(async (req, res) => {
   return res.status(200).json(new ApiResponse(201, products, "Found some products!!"))
 });
 
-
+//done
 const getProductById= asyncHandler(async(req,res)=>{
-  const _id= req.params
+  const {_id}= req.params
 
   console.log(_id);
 
-  const product= await Product.findOne({_id});
+  // const product= await Product.findOne({_id});
 
-  if(!product) throw new ApiError(500, "No product Found!!")
+  // if(!product) throw new ApiError(500, "No product Found!!")
 
-  return res.status(200).json(new ApiResponse(201, product, "Got the prodcut"))
+  // return res.status(200).json(new ApiResponse(201, product, "Got the prodcut"))
+
+
+  ////*************** sql code */
+  const query = `
+  SELECT 
+    product.prod_id,
+    product.prod_name, 
+    series.ser_name, 
+    product.photo, 
+    category.cat_name, 
+    color.col_name, 
+    user.user_name, 
+    product.archive, 
+    product.stock, 
+    product.created_at, 
+    product.updated_at
+  FROM 
+    product
+  JOIN 
+    series ON product.series_id = series.ser_id
+  JOIN 
+    category ON product.category_id = category.cat_id
+  JOIN 
+    color ON product.color_id = color.col_id
+  JOIN 
+    user ON product.user_id = user.user_id
+  WHERE 
+    product.prod_id = ${_id}
+`;
+
+connection.query(query, (error, result) => {
+  if (error) {
+    console.error("Error fetching product:", error); // Log the error for debugging
+    return res.status(500).json(new ApiError(500, "Something went wrong: " + error.message));
+  }
+
+  console.log("Product retrieved successfully:", result);
+  connection.end(); // Close the connection
+
+  return res.status(200).json(new ApiResponse(200, result[0], "Got the product successfully"));
+});
+
 })
 
 //done
