@@ -141,7 +141,7 @@ const getAllCategoriesOfAseries= asyncHandler(async(req,res)=>{
     });
 })
 
-
+//done
 const getAllColors= asyncHandler(async(req,res)=>{
   const {series_id, category_id} = req.body;
 
@@ -208,25 +208,44 @@ const updateNullCategoryToXYZ = async (req,res) => {
   }
 };
 
-
+//done
 const getTheFinalProductList= asyncHandler(async(req,res)=>{
 
-  const {series, category, color}= req.body;
+  const {series_id, category_id, color_id}= req.body;
 
-  if([series, category, color].some(fields=> fields.trim()==='')){
-    throw new ApiError(500, "All fields are required!!")
-  }
-  const productList= await Product.aggregate([
-    {
-      $match: {
-        Series: series,
-        Category:category,
-        Color:color
-      },
-    },
-  ])
+  // if([series, category, color].some(fields=> fields.trim()==='')){
+  //   throw new ApiError(500, "All fields are required!!")
+  // }
+  // const productList= await Product.aggregate([
+  //   {
+  //     $match: {
+  //       Series: series,
+  //       Category:category,
+  //       Color:color
+  //     },
+  //   },
+  // ])
 
-  return res.status(200).json(new ApiResponse(201, productList,"Got the products Successfully!!"))
+  // return res.status(200).json(new ApiResponse(201, productList,"Got the products Successfully!!"))
+
+
+  //////************sql code */
+
+  if(!series_id || !category_id || !color_id) throw new ApiError(500, "sereis , color and category are required!!")
+
+    const query = `
+    SELECT DISTINCT product.prod_id, product.prod_name
+    FROM product
+    INNER JOIN color ON product.color_id = color.col_id
+    WHERE product.series_id = ${series_id} AND product.category_id = ${category_id} AND product.color_id = ${color_id}`;
+
+    connection.query(query, (error, result) => {
+      if (error) throw new ApiError(500, "somehting went worinng in sql "+ error);
+
+      console.log(result);
+
+      return res.status(200).json(new ApiResponse(201, result,"Got the products Successfully!!"))
+    });
 })
 
 const updateProductQuantity = asyncHandler(async (req, res) => {
