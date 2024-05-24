@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addCDProduct, getAllCDProducts, getAllCategoriesOfAseries, getAllColors, getAllSeries, getProductById, getTheFinalProductList, searchProduct, updateNullCategoryToXYZ, updateProductQuantity } from "../controllers/products.controller.js";
+import { addCDProduct, getAllCDProducts, getAllCategories, getAllCategoriesOfAseries, getAllColorsOfSereisAndCat, getAllSeries, getProductById, getTheFinalProductList, searchProduct, updateNullCategoryToXYZ, updateProductQuantity } from "../controllers/products.controller.js";
 import { upload } from "../middleware/multer.middleware.js";
 
 const router = Router();
@@ -18,8 +18,9 @@ router.route('/updateproductquantity').post(updateProductQuantity)
 
 
 router.route('/getallseries').get(getAllSeries)
-router.route('/getallcategories').post(getAllCategoriesOfAseries)
-router.route('/getallcolors').post(getAllColors)
+router.route('/getallcategories').get(getAllCategories)
+router.route('/getallcategoriesofseries').post(getAllCategoriesOfAseries)
+router.route('/getallcolorsofseriesandcat').post(getAllColorsOfSereisAndCat)
 router.route('/getfinalproductlist').post(getTheFinalProductList);
 
 export default router;

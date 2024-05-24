@@ -18,7 +18,7 @@ const Level2 = () => {
     const fetchSeries = async () => {
       try {
         const res = await axios.post(
-          "http://localhost:9000/api/jung/v1/products/getallcategories",
+          "http://localhost:9000/api/jung/v1/products/getallcategoriesofseries",
           { series_id: series },
           { withCredentials: true }
         );

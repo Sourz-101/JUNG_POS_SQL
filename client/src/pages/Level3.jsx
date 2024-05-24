@@ -17,7 +17,7 @@ const Level3 = () => {
     const fetchSeries = async () => {
       try {
         const res = await axios.post(
-          "http://localhost:9000/api/jung/v1/products/getallcolors",
+          "http://localhost:9000/api/jung/v1/products/getallcolorsofseriesandcat",
           { series_id: series, category_id: category },
           { withCredentials: true }
         );

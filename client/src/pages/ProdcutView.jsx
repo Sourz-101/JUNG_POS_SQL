@@ -70,27 +70,33 @@ const ProdcutView = () => {
   }
 
   return (
-    <div className="bg-[#F9FDFF] w-full h-screen flex items-center justify-center flex-col gap-3">
+    <div className="bg-[#F9FDFF] w-full max-h-screen h-screen p-5 flex items-center justify-center flex-col gap-3 overflow-hidden">
       <Link
         to={
-          series && category && color
+          series && category && color && _id
             ? `/select/${series}/${category}/${color}`
-            : "/"
+            : `/`
         }
-        className="text-black absolute start-4 top-5"
+        className="text-black fixed left-4 top-5"
       >
         <IoArrowBackSharp size={35} className="text-[#175CD3]" />
+      </Link>
+
+        
+      
+      <Link to={series && category && color ? `/select/${series}/${category}/${color}/${_id}/editproduct` : `/${_id}/editproduct`} className="flex fixed right-10 top-10 justify-center items-center gap-5 bg-[#1470EF] text-white p-3 rounded-lg cursor-pointer hover:bg-blue-700" >
+        Edit Product <MdEdit size={20}/>
       </Link>
       <img
         src={product.photo}
         alt=""
-        className="w-72 aspect-square rounded-xl shadow-xl"
+        className="w-72 aspect-square rounded-xl shadow-xl p-2"
       />
 
-      <p className="text-4xl font-bold m-5">{product.prod_name}</p>
+      <p className="text-3xl font-bold p-2">{product.prod_name}</p>
 
       {/* Current Stock */}
-      <div className="flex w-96 justify-between items-center text-black gap-4">
+      <div className="flex w-96 justify-between items-center text-black ">
         <div className="flex justify-center items-center text-xl font-semibold border-gray-500 rounded-lg w-80 gap-2 p-4 bg-[#d0e9ff] h-20">
           <p>Current Stock :  </p>
           <input
@@ -136,7 +142,7 @@ const ProdcutView = () => {
       </div>
 
       {/* Details */}
-      <div className="p-5 w-96 bg-[#d0e9ff] rounded-lg text-black">
+      <div className="p-3 w-96 bg-[#d0e9ff] rounded-lg text-black">
         <p className="font-semibold text-xl">Details</p>
         <p>Name : {product.prod_name}</p>
         <p>Category : {product.cat_name}</p>

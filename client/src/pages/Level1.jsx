@@ -43,7 +43,7 @@ const Level1 = () => {
         {series?.map((item, index) => {
           return (
             <Link
-              to={`/select/${item.series_id}`}
+              to={`/select/${item.ser_id}`}
               className="rounded-md bg-[#1849A8] p-3 m-2 w-full text-center"
               key={item.series_id}
             >

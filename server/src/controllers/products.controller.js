@@ -78,7 +78,7 @@ const addCDProduct = asyncHandler(async (req, res) => {
       stock,
       archive,
       user_id,
-      photo,
+      photo.url,
     ],
     (error, result) => {
       if (error) {
@@ -230,7 +230,7 @@ const getAllSeries = asyncHandler(async (req, res) => {
 
   ///****************sql code */
 
-  const query = `select distinct series.ser_name, product.series_id from product inner join series on product.series_id = series.ser_id`;
+  const query = `select * from series`;
 
   connection.query(query, (error, result) => {
     if (error) throw new ApiError(500, "no data found by sql" + error);
@@ -242,6 +242,18 @@ const getAllSeries = asyncHandler(async (req, res) => {
       .json(new ApiResponse(201, result, "Got All Series!!"));
   });
 });
+//done
+const getAllCategories = asyncHandler(async (req, res)=>{
+  const query= `select * from category`
+
+  connection.query(query, (error, result)=>{
+    if(error) throw new ApiError(500, "Something went worng in fetching categories!!", error);
+
+    console.log(result);
+
+    return res.status(200).json(new ApiResponse(201, result, "Got all categories!!"))
+  })
+})
 
 //done
 const getAllCategoriesOfAseries = asyncHandler(async (req, res) => {
@@ -289,7 +301,7 @@ const getAllCategoriesOfAseries = asyncHandler(async (req, res) => {
 });
 
 //done
-const getAllColors = asyncHandler(async (req, res) => {
+const getAllColorsOfSereisAndCat = asyncHandler(async (req, res) => {
   const { series_id, category_id } = req.body;
 
   // if([series, category].some(fields=>fields?.trim()==="")){
@@ -454,6 +466,7 @@ export {
   getAllSeries,
   getAllCategoriesOfAseries,
   updateNullCategoryToXYZ,
-  getAllColors,
+  getAllColorsOfSereisAndCat,
   getTheFinalProductList,
+  getAllCategories
 };
