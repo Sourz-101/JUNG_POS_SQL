@@ -146,7 +146,7 @@ const ProdcutView = () => {
         <p className="font-semibold text-xl">Details</p>
         <p>Name : {product.prod_name}</p>
         <p>Category : {product.cat_name}</p>
-        <p>Color : {product.cat_name ? product.cat_name : "Not Def"}</p>
+        <p>Color : {product.col_name ? product.col_name : "Not Def"}</p>
       </div>
     </div>
   );
