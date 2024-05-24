@@ -4,6 +4,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { Product } from "../models/products.model.js";
 import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
 import { sqlDatabase } from "../db/sql.config.js";
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 const connection = sqlDatabase();
 
@@ -21,24 +22,52 @@ const getAllCDProducts = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, cdProducts, "Got All prudcuts!!"));
 });
 
+//done
 const addCDProduct = asyncHandler(async (req, res) => {
-  const { Name, Category, Image, Quantity, AddedDate } = req.body;
+  // const { Name, Category, Image, Quantity, AddedDate } = req.body;
 
-  const Cdinstance = await Product.create({
-    Name,
-    Category,
-    Image,
-    Quantity,
-    "Added Date": AddedDate,
-  });
+  // const Cdinstance = await Product.create({
+  //   Name,
+  //   Category,
+  //   Image,
+  //   Quantity,
+  //   "Added Date": AddedDate,
+  // });
 
-  if (!Cdinstance) {
-    throw new ApiError(500, "Error in adding data!!");
+  // if (!Cdinstance) {
+  //   throw new ApiError(500, "Error in adding data!!");
+  // }
+
+  // return res
+  //   .status(200)
+  //   .json(new ApiResponse(201, Cdinstance, "added successfully!!"));
+
+
+
+  /////***************sql code************ */
+
+
+  const {prod_name, series_id, category_id, color_id, stock, archive, user_id}=req.body;
+
+  console.log(req.files.photo[0].path);
+  const photoLocalPath= req.files.photo[0].path;
+  console.log(photoLocalPath)
+
+  const photo= await uploadOnCloudinary(photoLocalPath);
+  console.log(photo);
+
+  const query = `INSERT INTO product (prod_name, series_id, category_id, color_id, stock, archive, user_id, photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+
+connection.query(query, [prod_name, series_id, category_id, color_id, stock, archive, user_id, photo], (error, result) => {
+  if (error) {
+    throw new ApiError(500, "Something went wrong in adding product!!!", error);
   }
 
-  return res
-    .status(200)
-    .json(new ApiResponse(201, Cdinstance, "added successfully!!"));
+  console.log(result);
+  return res.status(201).json(new ApiResponse(201, result, "Product added successfully!!!"));
+});
+
+
 });
 
 //done
@@ -344,6 +373,7 @@ const getTheFinalProductList = asyncHandler(async (req, res) => {
   });
 });
 
+//done
 const updateProductQuantity = asyncHandler(async (req, res) => {
   const { quantity, product_id } = req.body;
 
