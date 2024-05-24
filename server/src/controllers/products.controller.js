@@ -354,23 +354,37 @@ const updateProductQuantity = asyncHandler(async (req, res) => {
     );
   }
 
-  const product = await Product.findOne({ _id: product_id });
+  // const product = await Product.findOne({ _id: product_id });
 
-  if (!product) {
-    throw new ApiError(404, "No product found");
-  }
-  console.log(product);
-  product.Quantity = quantity;
+  // if (!product) {
+  //   throw new ApiError(404, "No product found");
+  // }
+  // console.log(product);
+  // product.Quantity = quantity;
 
-  const updated_product = await product.save();
+  // const updated_product = await product.save();
 
-  if (!updated_product) {
-    throw new ApiError(500, "Something went wrong in updating product");
-  }
+  // if (!updated_product) {
+  //   throw new ApiError(500, "Something went wrong in updating product");
+  // }
 
-  return res
-    .status(200)
-    .json(new ApiResponse(200, updated_product, "Product updated"));
+  // return res
+  //   .status(200)
+  //   .json(new ApiResponse(200, updated_product, "Product updated"));
+
+  /////************** sql code*************/  
+
+
+
+  const query= `update product set stock = ${quantity} where prod_id = ${product_id}`;
+
+  connection.query(query, (error, result)=>{
+    if(error) throw new ApiError(500, "Something went worng in updating quantity!!! ", error);
+
+      return res
+        .status(200)
+        .json(new ApiResponse(200, result[0], "Product updated"));
+  })
 });
 
 export {
