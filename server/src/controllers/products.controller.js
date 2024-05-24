@@ -8,18 +8,23 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 const connection = sqlDatabase();
 
-const getAllCDProducts = asyncHandler(async (req, res) => {
-  const cdProducts = await Product.find();
-  if (!cdProducts) {
-    throw new ApiError(
-      500,
-      "Something went wrong in fetching the cd Prodcuts!!"
-    );
-  }
 
-  return res
-    .status(200)
-    .json(new ApiResponse(201, cdProducts, "Got All prudcuts!!"));
+//done
+const getAllCDProducts = asyncHandler(async (req, res) => {
+  const query = `select * from product`;
+
+  connection.query(query, (error, result) => {
+    if (error)
+      throw new ApiError(
+        500,
+        "Something went wrong in fetching the cd Prodcuts!!"
+      );
+
+    console.log(result);
+    return res
+      .status(200)
+      .json(new ApiResponse(201, result, "Got All prudcuts!!"));
+  });
 });
 
 //done
@@ -42,32 +47,54 @@ const addCDProduct = asyncHandler(async (req, res) => {
   //   .status(200)
   //   .json(new ApiResponse(201, Cdinstance, "added successfully!!"));
 
-
-
   /////***************sql code************ */
 
-
-  const {prod_name, series_id, category_id, color_id, stock, archive, user_id}=req.body;
+  const {
+    prod_name,
+    series_id,
+    category_id,
+    color_id,
+    stock,
+    archive,
+    user_id,
+  } = req.body;
 
   console.log(req.files.photo[0].path);
-  const photoLocalPath= req.files.photo[0].path;
-  console.log(photoLocalPath)
+  const photoLocalPath = req.files.photo[0].path;
+  console.log(photoLocalPath);
 
-  const photo= await uploadOnCloudinary(photoLocalPath);
+  const photo = await uploadOnCloudinary(photoLocalPath);
   console.log(photo);
 
   const query = `INSERT INTO product (prod_name, series_id, category_id, color_id, stock, archive, user_id, photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
 
-connection.query(query, [prod_name, series_id, category_id, color_id, stock, archive, user_id, photo], (error, result) => {
-  if (error) {
-    throw new ApiError(500, "Something went wrong in adding product!!!", error);
-  }
+  connection.query(
+    query,
+    [
+      prod_name,
+      series_id,
+      category_id,
+      color_id,
+      stock,
+      archive,
+      user_id,
+      photo,
+    ],
+    (error, result) => {
+      if (error) {
+        throw new ApiError(
+          500,
+          "Something went wrong in adding product!!!",
+          error
+        );
+      }
 
-  console.log(result);
-  return res.status(201).json(new ApiResponse(201, result, "Product added successfully!!!"));
-});
-
-
+      console.log(result);
+      return res
+        .status(201)
+        .json(new ApiResponse(201, result, "Product added successfully!!!"));
+    }
+  );
 });
 
 //done
@@ -116,15 +143,13 @@ JOIN
     const products = allprodcuts.filter((product) => {
       const productName = product?.prod_name?.toString().toLowerCase();
       const searchText = inputText?.toString().toLowerCase();
-      return (
-        productName?.includes(searchText)
-      );
+      return productName?.includes(searchText);
     });
     if (!products) {
       throw new ApiError(500, "no Prodcut found!!");
     }
-console.log("got prodcuts successfully:");
-    
+    console.log("got prodcuts successfully:");
+
     return res
       .status(200)
       .json(new ApiResponse(201, products, "Found some products!!"));
@@ -402,19 +427,22 @@ const updateProductQuantity = asyncHandler(async (req, res) => {
   //   .status(200)
   //   .json(new ApiResponse(200, updated_product, "Product updated"));
 
-  /////************** sql code*************/  
+  /////************** sql code*************/
 
+  const query = `update product set stock = ${quantity} where prod_id = ${product_id}`;
 
+  connection.query(query, (error, result) => {
+    if (error)
+      throw new ApiError(
+        500,
+        "Something went worng in updating quantity!!! ",
+        error
+      );
 
-  const query= `update product set stock = ${quantity} where prod_id = ${product_id}`;
-
-  connection.query(query, (error, result)=>{
-    if(error) throw new ApiError(500, "Something went worng in updating quantity!!! ", error);
-
-      return res
-        .status(200)
-        .json(new ApiResponse(200, result[0], "Product updated"));
-  })
+    return res
+      .status(200)
+      .json(new ApiResponse(200, result[0], "Product updated"));
+  });
 });
 
 export {
