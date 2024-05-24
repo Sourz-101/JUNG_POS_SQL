@@ -9,6 +9,7 @@ import Level2 from "../pages/Level2.jsx";
 import Level3 from "../pages/Level3.jsx";
 import Level4 from "../pages/Level4.jsx";
 import EditProduct from "../pages/EditProduct.jsx";
+import AddProduct from "../pages/AddProduct.jsx";
 
 const router = createBrowserRouter([
     {
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
     {
       path:"/:_id/editproduct",
       element:<EditProduct/>
+    },
+    {
+      path:"/addproduct",
+      element:<AddProduct/>
     },
     {
       path: "/welcome",

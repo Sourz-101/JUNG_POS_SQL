@@ -61,6 +61,7 @@ const Home = () => {
       id="cont"
       onClick={() => setText("")}
     >
+    {text==='' ? <Link to={`/addproduct`} className="fixed top-10 right-10 text-xl font-semibold bg-[#1470EF] cursor-pointer hover:bg-blue-700 text-white p-2 rounded-lg"> + Add Product</Link> : ""}
       {/* <SearchBar/> */}
       {
         <input

@@ -8,6 +8,7 @@ const storage = multer.diskStorage({
       cb(null, "server/public/temp")  // storing desitination in server
     },
     filename: function (req, file, cb) {
+      // console.log(file)
       cb(null, file.originalname) // file name defining
     }
   })

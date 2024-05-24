@@ -8,7 +8,6 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 const connection = sqlDatabase();
 
-
 //done
 const getAllCDProducts = asyncHandler(async (req, res) => {
   const query = `select * from product`;
@@ -59,7 +58,7 @@ const addCDProduct = asyncHandler(async (req, res) => {
     user_id,
   } = req.body;
 
-  console.log(req.files.photo[0].path);
+  console.log(req.files);
   const photoLocalPath = req.files.photo[0].path;
   console.log(photoLocalPath);
 
@@ -174,9 +173,12 @@ const getProductById = asyncHandler(async (req, res) => {
     product.prod_id,
     product.prod_name, 
     series.ser_name, 
+    series.ser_id,
     product.photo, 
     category.cat_name, 
+    category.cat_id,
     color.col_name, 
+    color.col_id,
     user.user_name, 
     product.archive, 
     product.stock, 
@@ -243,17 +245,43 @@ const getAllSeries = asyncHandler(async (req, res) => {
   });
 });
 //done
-const getAllCategories = asyncHandler(async (req, res)=>{
-  const query= `select * from category`
+const getAllCategories = asyncHandler(async (req, res) => {
+  const query = `select * from category`;
 
-  connection.query(query, (error, result)=>{
-    if(error) throw new ApiError(500, "Something went worng in fetching categories!!", error);
+  connection.query(query, (error, result) => {
+    if (error)
+      throw new ApiError(
+        500,
+        "Something went worng in fetching categories!!",
+        error
+      );
 
     console.log(result);
 
-    return res.status(200).json(new ApiResponse(201, result, "Got all categories!!"))
-  })
-})
+    return res
+      .status(200)
+      .json(new ApiResponse(201, result, "Got all categories!!"));
+  });
+});
+//done
+const getAllColors = asyncHandler(async (req, res) => {
+  const query = `select * from color`;
+
+  connection.query(query, (error, result) => {
+    if (error)
+      throw new ApiError(
+        500,
+        "Something went worng in fetching color!!",
+        error
+      );
+
+    console.log(result);
+
+    return res
+      .status(200)
+      .json(new ApiResponse(201, result, "Got all color!!"));
+  });
+});
 
 //done
 const getAllCategoriesOfAseries = asyncHandler(async (req, res) => {
@@ -457,6 +485,49 @@ const updateProductQuantity = asyncHandler(async (req, res) => {
   });
 });
 
+const updateProduct = asyncHandler(async (req, res) => {
+  const { prod_id, prod_name, cat_id, ser_id, col_id } = req.body;
+  console.log(prod_id, prod_name, cat_id, ser_id, col_id )
+  const query = `
+    select * from product where prod_id = ${prod_id}
+  `;
+
+  connection.query(query, (error, result) => {
+    if (error)
+      throw new ApiError(500, "Something went worng in finding product");
+
+    console.log(result);
+
+    const product = result[0];
+
+    const updateQuery = `
+    UPDATE product 
+    SET 
+        prod_name = ${prod_name ? `'${prod_name}'` : `'${product.prod_name}'`},
+        series_id = ${ser_id ? `'${ser_id}'` : `'${product.series_id}'`},
+        category_id = ${cat_id ? `'${cat_id}'` : `'${product.category_id}'`},
+        color_id = ${col_id ? `'${col_id}'` : `'${product.color_id}'`}
+    WHERE 
+        prod_id = '${prod_id}'
+`;
+
+    connection.query(updateQuery, (error, results) => {
+      if (error)
+        throw new ApiError(
+          500,
+          "Something went worng in updating product!!",
+          error
+        );
+
+      console.log(results);
+
+      return res
+        .status(200)
+        .json(new ApiResponse(201, results, "Got the product"));
+    });
+  });
+});
+
 export {
   getAllCDProducts,
   addCDProduct,
@@ -468,5 +539,7 @@ export {
   updateNullCategoryToXYZ,
   getAllColorsOfSereisAndCat,
   getTheFinalProductList,
-  getAllCategories
+  getAllCategories,
+  getAllColors,
+  updateProduct,
 };
