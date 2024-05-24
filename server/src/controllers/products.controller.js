@@ -48,37 +48,21 @@ const addCDProduct = asyncHandler(async (req, res) => {
 
   /////***************sql code************ */
 
-  const {
-    prod_name,
-    series_id,
-    category_id,
-    color_id,
-    stock,
-    archive,
-    user_id,
-  } = req.body;
+  const { prod_name, ser_id, cat_id, col_id, stock, archive, user_id } =
+    req.body;
 
-  console.log(req.files);
-  const photoLocalPath = req.files.photo[0].path;
-  console.log(photoLocalPath);
+  // console.log(req.files);
+  // const photoLocalPath = req.files.photo[0].path;
+  // console.log(photoLocalPath);
 
-  const photo = await uploadOnCloudinary(photoLocalPath);
-  console.log(photo);
+  // const photo = await uploadOnCloudinary(photoLocalPath);
+  // console.log(photo);
 
   const query = `INSERT INTO product (prod_name, series_id, category_id, color_id, stock, archive, user_id, photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
 
   connection.query(
     query,
-    [
-      prod_name,
-      series_id,
-      category_id,
-      color_id,
-      stock,
-      archive,
-      user_id,
-      photo.url,
-    ],
+    [prod_name, ser_id, cat_id, col_id, stock, archive, user_id, "xyz.jpg"],
     (error, result) => {
       if (error) {
         throw new ApiError(
@@ -487,7 +471,7 @@ const updateProductQuantity = asyncHandler(async (req, res) => {
 
 const updateProduct = asyncHandler(async (req, res) => {
   const { prod_id, prod_name, cat_id, ser_id, col_id } = req.body;
-  console.log(prod_id, prod_name, cat_id, ser_id, col_id )
+  console.log(prod_id, prod_name, cat_id, ser_id, col_id);
   const query = `
     select * from product where prod_id = ${prod_id}
   `;

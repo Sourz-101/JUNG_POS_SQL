@@ -11,6 +11,7 @@ const AddProduct = () => {
     col_id: "",
     stock: 0,
     archive: 0,
+    user_id:1
   });
 
   const [allSeries, setAllSeries] = useState([]);
