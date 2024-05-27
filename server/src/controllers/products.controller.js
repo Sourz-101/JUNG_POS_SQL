@@ -512,6 +512,40 @@ const updateProduct = asyncHandler(async (req, res) => {
   });
 });
 
+const addSeries= asyncHandler(async(req, res)=>{
+  const {ser_name}= req.body;
+
+  const query= `insert into series (ser_name) values (?)`;
+
+  connection.query(query,[ser_name],(error, result)=>{
+    if(error) throw new ApiError(500, "Error in genrating the sereis", error);
+
+    return res.status(200).json(new ApiResponse(201, result, "added category sussfully!!"));
+  })
+});
+const addCategory= asyncHandler(async(req, res)=>{
+  const {cat_name}= req.body;
+
+  const query= `insert into category (cat_name) values (?)`;
+
+  connection.query(query,[cat_name],(error, result)=>{
+    if(error) throw new ApiError(500, "Error in genrating the sereis", error);
+
+    return res.status(200).json(new ApiResponse(201, result, "added category sussfully!!"));
+  })
+});
+const addColor= asyncHandler(async(req, res)=>{
+  const {col_name}= req.body;
+
+  const query= `insert into color (col_name) values (?)`;
+
+  connection.query(query,[col_name],(error, result)=>{
+    if(error) throw new ApiError(500, "Error in genrating the sereis", error);
+
+    return res.status(200).json(new ApiResponse(201, result, "added category sussfully!!"));
+  })
+});
+
 export {
   getAllCDProducts,
   addCDProduct,
@@ -526,4 +560,7 @@ export {
   getAllCategories,
   getAllColors,
   updateProduct,
+  addCategory,
+  addSeries,
+  addColor
 };
