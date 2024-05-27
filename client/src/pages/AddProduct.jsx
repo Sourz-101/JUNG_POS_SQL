@@ -102,9 +102,9 @@ const AddProduct = () => {
     fetchCategories();
     fetchColors();
   }, []);
-  useEffect(()=>{
+  useEffect(() => {
     handleImageChange();
-  },[input.photo])
+  }, [input.photo]);
   return (
     <div className="w-full h-full ">
       <div className="bg-[#F9FDFF] w-full  h-screen p-5 flex items-center justify-center flex-col md:flex-row lg:flex-row gap-3 ">
@@ -119,26 +119,31 @@ const AddProduct = () => {
           ADD <FaCheck />
         </div>
 
-        <div className="w-full md:w-1/3 h-fit flex flex-col justify-center items-center gap-5 mt-52 md:mt-0">
-          <img
-            src={displayImage || 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/991px-Placeholder_view_vector.svg.png'}
-            alt="prodcut_image"
-            className="w-72 aspect-square rounded-xl shadow-xl p-2"
-          />
+        {/* Image Input */}
+        <div className="w-full md:w-1/3 h-fit flex flex-col justify-center items-start md:items-center sm:items-center gap-5">
           <input
             type="file"
+            accept="image/*"
             onChange={(e) => setInput({ ...input, photo: e.target.files[0] })}
+          />
+          <img
+            src={
+              displayImage ||
+              "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/991px-Placeholder_view_vector.svg.png"
+            }
+            alt="prodcut_image"
+            className="w-80 aspect-square rounded-xl shadow-lg mt-2"
           />
         </div>
 
-        <div className="w-fit flex flex-col justify-center items-center gap-5">
+        <div className="w-fit flex flex-col justify-center items-start gap-5">
           <label
             htmlFor="prod_name"
-            className="flex justify-center items-center gap-5 font-bold text-3xl"
+            className="flex justify-center items-center gap-5 font-bold text-xl"
           >
-            <p>Product Name : </p>
+            <p>Product Name </p>
             <input
-              className="bg-lime-50 p-2 w-60"
+              className="bg-lime-50 p-2 w-60 border border-black rounded-lg"
               name="prod_name"
               id="prod_name"
               value={input.prod_name}
@@ -149,10 +154,13 @@ const AddProduct = () => {
           </label>
 
           {/* Details */}
-          <div className="p-3 w-96 bg-[#d0e9ff] rounded-lg text-black flex flex-col gap-4 items-start justify-center">
+          <div className="p-3 w-fit bg-[#d0e9ff] rounded-lg text-black flex flex-col gap-4 items-start justify-center">
             <p className="font-semibold text-xl">Select Details</p>
-            <label className="w-full flex gap-4 items-center justify-start">
-              <p>Select Series : </p>
+
+            <div className="text-black grid grid-cols-2 gap-4 items-center justify-start">
+              <label className="w-full flex gap-4 items-center justify-start">
+                <p>Select Series : </p>
+              </label>
               <select
                 placeholder="Series"
                 value={input.ser_id}
@@ -168,10 +176,10 @@ const AddProduct = () => {
                   );
                 })}
               </select>
-            </label>
 
-            <label className="w-full flex gap-4 items-center justify-start">
-              <p>Select Category : </p>
+              <label className="w-full flex gap-4 items-center justify-start">
+                <p>Select Category : </p>
+              </label>
               <select
                 placeholder="Category"
                 value={input.cat_id}
@@ -187,10 +195,10 @@ const AddProduct = () => {
                   );
                 })}
               </select>
-            </label>
 
-            <label className="w-full flex gap-4 items-center justify-start">
-              <p>Select Color : </p>
+              <label className="w-full flex gap-4 items-center justify-start">
+                <p>Select Color : </p>
+              </label>
               <select
                 placeholder="Color"
                 value={input.col_id}
@@ -206,10 +214,10 @@ const AddProduct = () => {
                   );
                 })}
               </select>
-            </label>
 
-            <label className="w-full flex gap-4 items-center justify-start">
-              <p>Enter Stock Quantity : </p>
+              <label className="w-full flex gap-4 items-center justify-start">
+                <p>Enter Stock Quantity : </p>
+              </label>
               <input
                 type="number"
                 placeholder="Stock Quantity"
@@ -217,10 +225,10 @@ const AddProduct = () => {
                 onChange={(e) => setInput({ ...input, stock: e.target.value })}
                 className="w-40 p-2"
               />
-            </label>
 
-            <label className="w-full flex gap-4 items-center justify-start">
-              <p>Select Series : </p>
+              <label className="w-full flex gap-4 items-center justify-start">
+                <p>Archived : </p>
+              </label>
               <select
                 placeholder="Color"
                 value={input.archive}
@@ -232,7 +240,7 @@ const AddProduct = () => {
                 <option value="0">No</option>
                 <option value="1">Yes</option>
               </select>
-            </label>
+            </div>
           </div>
         </div>
       </div>

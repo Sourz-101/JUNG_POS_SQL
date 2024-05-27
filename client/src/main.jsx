@@ -12,7 +12,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <>
     <RouterProvider router={router} />
     <div>
-      <Toaster position="bottom-center" reverseOrder={false} />
+      <Toaster reverseOrder={false} />
     </div>
   </>
 );

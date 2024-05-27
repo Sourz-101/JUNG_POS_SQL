@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa6";
 import { IoArrowBackSharp } from "react-icons/io5";
 import { Link, useParams } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 const EditProduct = () => {
   const { series, category, color, _id } = useParams();
@@ -95,7 +96,8 @@ const EditProduct = () => {
 
       console.log(response.data.data);
 
-      alert("Prodcut updated successfully");
+      // alert("Prodcut updated successfully");
+      toast.success("Product updated successfully!!")
       fetchProdcutData();
     } catch (error) {
       alert("error in updating product!!!")
@@ -131,16 +133,16 @@ const EditProduct = () => {
         <img
           src={currPhoto}
           alt="prodcut_image"
-          className="w-72 aspect-square rounded-xl shadow-xl p-2"
+          className="w-72 aspect-square rounded-xl shadow-lg"
         />
 
         <label
           htmlFor="prod_name"
-          className="flex justify-center items-center gap-5 font-bold text-3xl"
+          className="flex justify-center items-center gap-5 font-bold text-xl"
         >
           <p>Edit Name : </p>
           <input
-            className="bg-lime-50 p-2 w-60"
+            className="bg-lime-50 p-2 w-60 border border-black rounded-lg"
             name="prod_name"
             id="prod_name"
             value={currName}
@@ -149,11 +151,11 @@ const EditProduct = () => {
         </label>
 
         {/* Details */}
-        <div className="p-3 w-96 bg-[#d0e9ff] rounded-lg text-black flex flex-col gap-4 items-start justify-center">
-          <p className="font-semibold text-xl">Select Details</p>
-          <label className="w-full flex gap-4 items-center justify-start">
-            <p>Select Series : </p>
-            <select placeholder="Series" value={currSeries} onChange={(e)=>setCurrSeries(e.target.value)} className="w-40 p-2">
+        <div className="p-3 w-96 bg-[#d0e9ff] rounded-lg text-black grid grid-cols-2 gap-4 items-center justify-start">
+          <p className="font-semibold text-xl col-span-2">Select Details</p>
+          
+          <p>Select Series : </p>
+          <select placeholder="Series" value={currSeries} onChange={(e)=>setCurrSeries(e.target.value)} className="w-40 p-2">
             <option value="">Series</option>
             {
               allSeries?.map((e)=>{
@@ -161,30 +163,29 @@ const EditProduct = () => {
               })
             }
           </select>
-          </label>
-          
-          <label className="w-full flex gap-4 items-center justify-start">
-            <p>Select Series : </p>
+
+          <p>Select Category : </p>
           <select placeholder="Category" value={currCategory} onChange={(e)=>setCurrCategory(e.target.value)} className="w-40 p-2">
-          <option value="">Category</option>
-          {
+            <option value="">Category</option>
+            {
               allCategory?.map((e)=>{
                 return <option value={e.cat_id} key={e.cat_id}>{e.cat_name}</option>
               })
             }
-          </select></label>
+          </select>
 
-          <label className="w-full flex gap-4 items-center justify-start">
-            <p>Select Series : </p>
+          <p>Select Colour : </p>
           <select placeholder="Color" value={currColor} onChange={(e)=>setCurrColor(e.target.value)} className="w-40 p-2">
-          <option value="">Color</option>
-          {
+            <option value="">Color</option>
+            {
               allColor?.map((e)=>{
                 return <option value={e.col_id} key={e.col_id}>{e.col_name}</option>
               })
             }
-          </select></label>
+          </select>
         </div>
+
+
       </div>
     </div>
   );
