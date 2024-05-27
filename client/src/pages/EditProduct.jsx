@@ -22,7 +22,7 @@ const EditProduct = () => {
   const fetchProdcutData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/jung/v1/products/getproductbyid/${_id}`
+        `https://jung-pos-sql.onrender.com/api/jung/v1/products/getproductbyid/${_id}`
       );
 
       if (!response) throw new Error("Cat get the response...");
@@ -42,7 +42,7 @@ const EditProduct = () => {
   const fetchSeries = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:9000/api/jung/v1/products/getallseries",
+        "https://jung-pos-sql.onrender.com/api/jung/v1/products/getallseries",
         { withCredentials: true }
       );
 
@@ -57,7 +57,7 @@ const EditProduct = () => {
   const fetchCategories = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:9000/api/jung/v1/products/getallcategories",
+        "https://jung-pos-sql.onrender.com/api/jung/v1/products/getallcategories",
         { withCredentials: true }
       );
 
@@ -71,7 +71,7 @@ const EditProduct = () => {
   const fetchColors = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:9000/api/jung/v1/products/getallcolors",
+        "https://jung-pos-sql.onrender.com/api/jung/v1/products/getallcolors",
         { withCredentials: true }
       );
 
@@ -94,7 +94,7 @@ const EditProduct = () => {
     }
 
     try {
-      const response= await axios.post("http://localhost:9000/api/jung/v1/products/updateproduct",{
+      const response= await axios.post("https://jung-pos-sql.onrender.com/api/jung/v1/products/updateproduct",{
         prod_id: _id, prod_name:currName, cat_id:currCategory, ser_id: currSeries, col_id: currColor, photo:currPhoto
       }, {
         withCredentials:true

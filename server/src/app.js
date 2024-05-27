@@ -3,17 +3,23 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import homeRouter from "./routes/home.routes.js";
 import userRouter from "./routes/user.routes.js";
-import prodcutsRouter from './routes/products.routes.js'
-import path from 'path';
+import prodcutsRouter from "./routes/products.routes.js";
+import path from "path";
 import bodyParser from "body-parser";
 
 const app = express();
-const __dirname= path.resolve();
+const __dirname = path.resolve();
 app.use(bodyParser.json());
+const allowedOrigins = ["http://localhost:5173", "https://jung-pos-sql.onrender.com"];
 app.use(
   cors({
-    origin: "http://localhost:5173",
-    credentials: true,
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Origin not allowed by CORS"));
+      }
+    },
   })
 );
 
@@ -27,9 +33,8 @@ app.use("/api", homeRouter);
 app.use("/api/jung/v1/user", userRouter);
 app.use("/api/jung/v1/products", prodcutsRouter);
 
-
 app.use(express.static(path.join(__dirname, "/client/dist")));
-app.get('*',(req,res)=>{
-  res.sendFile(path.join(__dirname, "client", "dist", "index.html"))
-})
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+});
 export { app };

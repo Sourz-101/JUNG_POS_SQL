@@ -7,7 +7,7 @@ const SearchBar = () => {
     try {
     //   console.log("fetching...");
       const response = await axios.post(
-        "http://localhost:9000/api/jung/v1/products/searchproducts",
+        "https://jung-pos-sql.onrender.com/api/jung/v1/products/searchproducts",
         { inputText },
         {
           headers: {
