@@ -1,5 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { FaCheck } from "react-icons/fa6";
+import { IoArrowBackSharp } from "react-icons/io5";
+import { Link } from "react-router-dom";
 
 const AddProduct = () => {
   const [displayImage, setDisplayImage] = useState("");
@@ -11,17 +14,16 @@ const AddProduct = () => {
     col_id: "",
     stock: 0,
     archive: 0,
-    user_id:1
+    user_id: 1,
   });
 
   const [allSeries, setAllSeries] = useState([]);
   const [allCategory, setAllCategory] = useState([]);
   const [allColor, setAllColor] = useState([]);
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
+  const handleImageChange = () => {
+    const file = input.photo;
     if (file) {
-
       const reader = new FileReader();
       reader.onloadend = () => {
         setDisplayImage(reader.result);
@@ -74,142 +76,166 @@ const AddProduct = () => {
     }
   };
 
-  const handleSubmit= async(e)=>{
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(input)
+    console.log(input);
 
     try {
-        const response = await axios.post('http://localhost:9000/api/jung/v1/products/addcdproduct',input, {withCredentials:true});
-        if(!response.data.data) throw new Error("Something went wrong in adding the product!!!")
+      const response = await axios.post(
+        "http://localhost:9000/api/jung/v1/products/addcdproduct",
+        input,
+        { withCredentials: true }
+      );
+      if (!response.data.data)
+        throw new Error("Something went wrong in adding the product!!!");
 
-        alert("Product Added Successfully!!!");
-        console.log(response.data.data)
+      alert("Product Added Successfully!!!");
+      console.log(response.data.data);
     } catch (error) {
-        console.log(error);
-        alert(error.response.data.message)
+      console.log(error);
+      alert(error.response.data.message);
     }
-  }
+  };
 
   useEffect(() => {
     fetchSeries();
     fetchCategories();
     fetchColors();
   }, []);
+  useEffect(()=>{
+    handleImageChange();
+  },[input.photo])
   return (
-    <div className="w-full h-screen flex flex-col justify-center items-center p-5">
-      <form onSubmit={handleSubmit}
-        className="bg-blue-500 w-1/3 h-[95%] flex flex-col justify-start items-center p-5 gap-5"
-      >
-        <div className=" w-full flex flex-col justify-center items-center">
-          <img
-            src={displayImage ? displayImage : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSN1CKylUxNRuDeI7_41jDKtltoW4FaJktKHwJOwkguNInjjepOh7Yp-iHm9NYypTLmzU&usqp=CAU"}
-            alt="Uploaded"
-            className="h-32 aspect-square object-cover"
-          />
-          <input type="file" accept="image/*" onChange={(e)=>{
-            setInput({...input, photo:e.target.files[0]})
-            handleImageChange(e)}} />
+    <div className="w-full h-full ">
+      <div className="bg-[#F9FDFF] w-full  h-screen p-5 flex items-center justify-center flex-col md:flex-row lg:flex-row gap-3 ">
+        <Link to={"/"} className="text-black fixed left-4 top-5">
+          <IoArrowBackSharp size={35} className="text-[#175CD3]" />
+        </Link>
+
+        <div
+          className="flex fixed right-4 top-5 justify-center items-center gap-5 bg-green-600 text-white p-3 rounded-lg cursor-pointer hover:bg-green-700"
+          onClick={handleSubmit}
+        >
+          ADD <FaCheck />
         </div>
 
-
-        <label
-          htmlFor="prodcut_name"
-          className=" flex gap-10 items-center justify-between w-4/5"
-        > Product Name : 
-        <input type="text" id="product_name" name="product_name" placeholder="product name" className="w-40 p-2" onChange={(e)=>setInput({...input, prod_name:e.target.value})}/></label>
-
-
-
-        <label className=" flex gap-4 items-center justify-between w-4/5">
-          <p>Select Series : </p>
-          <select
-            placeholder="Series"
-            value={input.ser_id}
-            onChange={(e) => setInput({ ...input, ser_id: e.target.value })}
-            className="w-40 p-2"
-          >
-            <option value="">Series</option>
-            {allSeries?.map((e) => {
-              return (
-                <option key={e.ser_id} value={e.ser_id}>
-                  {e.ser_name}
-                </option>
-              );
-            })}
-          </select>
-        </label>
-
-        <label className=" flex gap-4 items-center justify-between w-4/5">
-          <p>Select Series : </p>
-          <select
-            placeholder="Category"
-            value={input.cat_id}
-            onChange={(e) => setInput({ ...input, cat_id: e.target.value })}
-            className="w-40 p-2"
-          >
-            <option value="">Category</option>
-            {allCategory?.map((e) => {
-              return (
-                <option value={e.cat_id} key={e.cat_id}>
-                  {e.cat_name}
-                </option>
-              );
-            })}
-          </select>
-        </label>
-
-        <label className=" flex gap-4 items-center justify-between w-4/5">
-          <p>Select Series : </p>
-          <select
-            placeholder="Color"
-            value={input.col_id}
-            onChange={(e) => setInput({ ...input, col_id: e.target.value })}
-            className="w-40 p-2"
-          >
-            <option value="">Color</option>
-            {allColor?.map((e) => {
-              return (
-                <option value={e.col_id} key={e.col_id}>
-                  {e.col_name}
-                </option>
-              );
-            })}
-          </select>
-        </label>
-
-        <label
-          htmlFor="stock"
-          className=" flex gap-16 items-center justify-between w-4/5"
-        >
-          Stock :
-          <input
-            type="number"
-            name="stock"
-            id="stock"
-            value={input.stock}
-            onChange={(e) =>
-              setInput({
-                ...input,
-                stock: e.target.value > 0 ? e.target.value : 0,
-              })
-            }
-            className="w-40 p-2"
+        <div className="w-full md:w-1/3 h-fit flex flex-col justify-center items-center gap-5 mt-52 md:mt-0">
+          <img
+            src={displayImage || 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/991px-Placeholder_view_vector.svg.png'}
+            alt="prodcut_image"
+            className="w-72 aspect-square rounded-xl shadow-xl p-2"
           />
-        </label>
+          <input
+            type="file"
+            onChange={(e) => setInput({ ...input, photo: e.target.files[0] })}
+          />
+        </div>
 
-        <label
-          htmlFor="isarchive"
-          className="flex gap-10 items-center justify-between w-4/5"
-        >
-          isArchive :
-          <select name="isarchive" id="isarchive" value={input.archive} onChange={(e)=>setInput({...input, archive:e.target.value})} className="w-40 p-2">
-            
-            <option value={1}>Yes</option>
-            <option value={0}>No</option>
-          </select>
-        </label>
-        <input type="submit" value="submit" className="btn"/>
-      </form>
+        <div className="w-fit flex flex-col justify-center items-center gap-5">
+          <label
+            htmlFor="prod_name"
+            className="flex justify-center items-center gap-5 font-bold text-3xl"
+          >
+            <p>Product Name : </p>
+            <input
+              className="bg-lime-50 p-2 w-60"
+              name="prod_name"
+              id="prod_name"
+              value={input.prod_name}
+              onChange={(e) =>
+                setInput({ ...input, prod_name: e.target.value })
+              }
+            />
+          </label>
+
+          {/* Details */}
+          <div className="p-3 w-96 bg-[#d0e9ff] rounded-lg text-black flex flex-col gap-4 items-start justify-center">
+            <p className="font-semibold text-xl">Select Details</p>
+            <label className="w-full flex gap-4 items-center justify-start">
+              <p>Select Series : </p>
+              <select
+                placeholder="Series"
+                value={input.ser_id}
+                onChange={(e) => setInput({ ...input, ser_id: e.target.value })}
+                className="w-40 p-2"
+              >
+                <option value="">Series</option>
+                {allSeries?.map((e) => {
+                  return (
+                    <option key={e.ser_id} value={e.ser_id}>
+                      {e.ser_name}
+                    </option>
+                  );
+                })}
+              </select>
+            </label>
+
+            <label className="w-full flex gap-4 items-center justify-start">
+              <p>Select Category : </p>
+              <select
+                placeholder="Category"
+                value={input.cat_id}
+                onChange={(e) => setInput({ ...input, cat_id: e.target.value })}
+                className="w-40 p-2"
+              >
+                <option value="">Category</option>
+                {allCategory?.map((e) => {
+                  return (
+                    <option value={e.cat_id} key={e.cat_id}>
+                      {e.cat_name}
+                    </option>
+                  );
+                })}
+              </select>
+            </label>
+
+            <label className="w-full flex gap-4 items-center justify-start">
+              <p>Select Color : </p>
+              <select
+                placeholder="Color"
+                value={input.col_id}
+                onChange={(e) => setInput({ ...input, col_id: e.target.value })}
+                className="w-40 p-2"
+              >
+                <option value="">Color</option>
+                {allColor?.map((e) => {
+                  return (
+                    <option value={e.col_id} key={e.col_id}>
+                      {e.col_name}
+                    </option>
+                  );
+                })}
+              </select>
+            </label>
+
+            <label className="w-full flex gap-4 items-center justify-start">
+              <p>Enter Stock Quantity : </p>
+              <input
+                type="number"
+                placeholder="Stock Quantity"
+                value={input.stock}
+                onChange={(e) => setInput({ ...input, stock: e.target.value })}
+                className="w-40 p-2"
+              />
+            </label>
+
+            <label className="w-full flex gap-4 items-center justify-start">
+              <p>Select Series : </p>
+              <select
+                placeholder="Color"
+                value={input.archive}
+                onChange={(e) =>
+                  setInput({ ...input, archive: e.target.value })
+                }
+                className="w-40 p-2"
+              >
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+              </select>
+            </label>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

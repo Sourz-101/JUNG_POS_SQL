@@ -88,7 +88,6 @@ const Home = () => {
                   <p className="font-semibold ">{e.cat_name}</p>
                   <p className="font-semibold ">{e.col_name}</p>
                   <p className="font-semibold ">{e.stock}</p>
-                  <p className="font-semibold ">{e.created_at}</p>
                 </div>
               </Link>
             );

@@ -4,12 +4,7 @@ import { upload } from "../middleware/multer.middleware.js";
 
 const router = Router();
 router.route("/getcdproducts").get(getAllCDProducts);
-router.route("/addcdproduct").post(upload.fields([
-    {
-        name:"photo",
-        maxCount:1
-    }
-]),addCDProduct);
+router.route("/addcdproduct").post(upload.single('photo'),addCDProduct);
 router.route("/searchproducts").post(searchProduct);
 router.route('/getproductbyid/:_id').get(getProductById);
 router.route('/updatecat').get(updateNullCategoryToXYZ);
