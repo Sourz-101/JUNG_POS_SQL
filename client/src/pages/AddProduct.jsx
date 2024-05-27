@@ -4,6 +4,9 @@ import toast from "react-hot-toast";
 import { FaCheck } from "react-icons/fa6";
 import { IoArrowBackSharp } from "react-icons/io5";
 import { Link } from "react-router-dom";
+import AddSeries from "../components/Models/AddSeries.jsx";
+import AddCategory from "../components/Models/AddCategory.jsx";
+import AddColor from "../components/Models/AddColor.jsx";
 
 const AddProduct = () => {
   const [displayImage, setDisplayImage] = useState("");
@@ -21,6 +24,10 @@ const AddProduct = () => {
   const [allSeries, setAllSeries] = useState([]);
   const [allCategory, setAllCategory] = useState([]);
   const [allColor, setAllColor] = useState([]);
+
+  const [newSeries, setNewSeries]= useState('');
+  const [newCategory, setNewCategory]=useState('');
+  const [newColor, setNewColor]=useState('');
 
   const handleImageChange = () => {
     const file = input.photo;
@@ -111,6 +118,7 @@ const AddProduct = () => {
     }
   };
 
+
   useEffect(() => {
     fetchSeries();
     fetchCategories();
@@ -171,7 +179,7 @@ const AddProduct = () => {
           <div className="p-3 w-fit bg-[#d0e9ff] rounded-lg text-black flex flex-col gap-4 items-start justify-center">
             <p className="font-semibold text-xl">Select Details</p>
 
-            <div className="text-black grid grid-cols-2 gap-4 items-center justify-start">
+            <div className="text-black grid grid-cols-3 gap-4 items-center justify-start">
               <label className="w-full flex gap-4 items-center justify-start">
                 <p>Select Series : </p>
               </label>
@@ -180,8 +188,8 @@ const AddProduct = () => {
                 value={input.ser_id}
                 onChange={(e) => setInput({ ...input, ser_id: e.target.value })}
                 className="w-40 p-2"
-              >
-                <option value="">Series</option>
+              > 
+                <option value=''>Series</option>
                 {allSeries?.map((e) => {
                   return (
                     <option key={e.ser_id} value={e.ser_id}>
@@ -190,6 +198,9 @@ const AddProduct = () => {
                   );
                 })}
               </select>
+              
+              <button className="btn bg-green-600 text-white z-40 w-20 p-1" onClick={()=>document.getElementById('add_series').showModal()}>+ New</button>
+              <AddSeries/>
 
               <label className="w-full flex gap-4 items-center justify-start">
                 <p>Select Category : </p>
@@ -209,6 +220,9 @@ const AddProduct = () => {
                   );
                 })}
               </select>
+              <button className="btn bg-green-600 text-white z-40 w-20" onClick={()=>document.getElementById('add_category').showModal()}>+ New</button>
+                <AddCategory/>
+
 
               <label className="w-full flex gap-4 items-center justify-start">
                 <p>Select Color : </p>
@@ -228,7 +242,8 @@ const AddProduct = () => {
                   );
                 })}
               </select>
-
+              <button className="btn bg-green-600 text-white z-40 w-20 p-1" onClick={()=>document.getElementById('add_color').showModal()}>+ New</button>
+                <AddColor/>
               <label className="w-full flex gap-4 items-center justify-start">
                 <p>Enter Stock Quantity : </p>
               </label>
@@ -239,6 +254,7 @@ const AddProduct = () => {
                 onChange={(e) => setInput({ ...input, stock: e.target.value })}
                 className="w-40 p-2"
               />
+              <div></div>
 
               <label className="w-full flex gap-4 items-center justify-start">
                 <p>Archived : </p>

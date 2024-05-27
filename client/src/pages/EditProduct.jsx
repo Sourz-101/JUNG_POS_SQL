@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa6";
 import { IoArrowBackSharp } from "react-icons/io5";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
 const EditProduct = () => {
@@ -18,6 +18,22 @@ const EditProduct = () => {
   const [allSeries, setAllSeries] = useState([]);
   const [allCategory, setAllCategory] = useState([]);
   const [allColor, setAllColor] = useState([]);
+  const navigate= useNavigate();
+  const deleteProduct= async()=>{
+    try {
+      const res = await axios.post(
+        `https://jung-pos-sql.onrender.com/api/jung/v1/products/deleteproduct`,{prod_id:_id}, {withCredentials:true}
+      );
+
+      if (!res) throw new Error("Error in fetching series!!");
+      console.log(res.data.data);
+      toast.success('product deleted succeffully');
+      navigate('/');
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.data);
+    }
+  }
 
   const fetchProdcutData = async () => {
     try {
@@ -136,6 +152,10 @@ const EditProduct = () => {
 
         <div className="flex fixed right-10 top-10 justify-center items-center gap-5 bg-green-600 text-white p-3 rounded-lg cursor-pointer hover:bg-green-700" onClick={handleUpdate}>
           Save <FaCheck />
+        </div>
+
+        <div className="flex fixed right-10 top-24 justify-center items-center gap-5 bg-red-600 text-white p-3 rounded-lg cursor-pointer hover:bg-red-700" onClick={deleteProduct}>
+          Delete Product 
         </div>
 
         <img

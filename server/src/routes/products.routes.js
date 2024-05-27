@@ -4,12 +4,17 @@ import {
   addCategory,
   addColor,
   addSeries,
+  deleteCategory,
+  deleteColor,
+  deleteProduct,
+  deleteSeries,
   getAllCDProducts,
   getAllCategories,
   getAllCategoriesOfAseries,
   getAllColors,
   getAllColorsOfSereisAndCat,
   getAllSeries,
+  getProductByCategoryId,
   getProductById,
   getTheFinalProductList,
   searchProduct,
@@ -37,5 +42,12 @@ router.route("/updateproduct").post(updateProduct);
 router.route("/addseries").post(addSeries);
 router.route("/addcategory").post(addCategory);
 router.route("/addcolor").post(addColor);
+
+
+router.route('/deletecategory').post(deleteCategory)
+router.route('/deleteseries').post(deleteSeries)
+router.route('/deletecolor').post(deleteColor)
+router.route('/deleteproduct').post(deleteProduct)
+router.route('/getprodbyid/:ser_id').get(getProductByCategoryId)
 
 export default router;

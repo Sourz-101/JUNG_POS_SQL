@@ -602,6 +602,127 @@ const addColor = asyncHandler(async (req, res) => {
   });
 });
 
+const deleteCategory = asyncHandler(async (req, res) => {
+  const { cat_name } = req.body;
+
+  // Ensure cat_name is provided
+  if (!cat_name) {
+    throw new ApiError(400, "Category name is required");
+  }
+
+  const query = `DELETE FROM category WHERE cat_name = ?`;
+
+  connection.query(query, [cat_name], (error, result) => {
+    if (error) {
+      console.log(error)
+      return res.status(500).json( new ApiResponse(500, error, "error in deleting category"));
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json(new ApiResponse(404, null, "Category not found"));
+    }
+
+    return res.status(200).json(new ApiResponse(200, result, "Category deleted successfully!!!"));
+  });
+});
+
+
+
+
+const deleteSeries = asyncHandler(async (req, res) => {
+  const { ser_name } = req.body;
+
+  // Ensure ser_name is provided
+  if (!ser_name) {
+    throw new ApiError(400, "Series name is required");
+  }
+
+  const query = `DELETE FROM series WHERE ser_name = ?`;
+
+  connection.query(query, [ser_name], (error, result) => {
+    if (error) {
+      return res.status(500).json( new ApiResponse(500, error, "error in deleting series"));
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json(new ApiResponse(404, null, "Series not found"));
+    }
+
+    return res.status(200).json(new ApiResponse(200, result, "Series deleted successfully!!!"));
+  });
+});
+
+
+const deleteColor = asyncHandler(async (req, res) => {
+  const { col_name } = req.body;
+
+  // Ensure ser_name is provided
+  if (!col_name) {
+    throw new ApiError(400, "Color name is required");
+  }
+
+  const query = `DELETE FROM color WHERE col_name = ?`;
+
+  connection.query(query, [col_name], (error, result) => {
+    if (error) {
+      return res.status(500).json( new ApiResponse(500, error, "error in deleting color"));
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json(new ApiResponse(404, null, "Color not found"));
+    }
+
+    return res.status(200).json(new ApiResponse(200, result, "Color deleted successfully!!!"));
+  });
+});
+
+
+const deleteProduct = asyncHandler(async (req, res) => {
+  const { prod_id } = req.body;
+
+  // Ensure prod_id is provided
+  if (!prod_id) {
+    throw new ApiError(400, "Product ID is required");
+  }
+
+  const query = `DELETE FROM product WHERE prod_id = ?`;
+
+  connection.query(query, [prod_id], (error, result) => {
+    if (error) {
+      throw new ApiError(500, "Something went wrong while deleting the product!!");
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json(new ApiResponse(404, null, "Product not found"));
+    }
+
+    return res.status(200).json(new ApiResponse(200, result, "Product deleted successfully!!!"));
+  });
+});
+
+const getProductByCategoryId = asyncHandler(async (req, res) => {
+  const { ser_id } = req.params;
+
+  // Ensure cat_id is provided
+  if (!ser_id) {
+    throw new ApiError(400, "Category ID is required");
+  }
+
+  const query = `SELECT * FROM product WHERE series_id = ?`;
+
+  connection.query(query, [ser_id], (error, result) => {
+    if (error) {
+      console.log(error);
+      return res.status(500).json(new ApiResponse(404, error, "error"));
+    }
+
+    if (result.length === 0) {
+      return res.status(404).json(new ApiResponse(404, null, "No products found for the provided category ID"));
+    }
+
+    return res.status(200).json(new ApiResponse(200, result, "Products retrieved successfully"));
+  });
+});
 export {
   getAllCDProducts,
   addCDProduct,
@@ -619,4 +740,9 @@ export {
   addCategory,
   addSeries,
   addColor,
+  deleteCategory,
+  deleteSeries,
+  deleteColor,
+  deleteProduct,
+  getProductByCategoryId
 };
