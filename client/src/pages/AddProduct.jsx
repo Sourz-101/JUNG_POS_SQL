@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { FaCheck } from "react-icons/fa6";
 import { IoArrowBackSharp } from "react-icons/io5";
 import { Link } from "react-router-dom";
@@ -80,20 +81,33 @@ const AddProduct = () => {
     e.preventDefault();
     console.log(input);
 
+    if (
+      [input.prod_name,
+      input.cat_id,
+      input.ser_id,
+      input.col_id].some((field)=>field?.trim()==="")
+    ) {
+      toast.error("All fields are required!! and stock can't be 0");
+      return;
+    }
+
     try {
+      if(!confirm("Are you sure want to add porduct?")){
+        return;
+      }
       const response = await axios.post(
         "http://localhost:9000/api/jung/v1/products/addcdproduct",
         input,
         { withCredentials: true }
       );
-      if (!response.data.data)
+      if (!response.data.data )
         throw new Error("Something went wrong in adding the product!!!");
 
-      alert("Product Added Successfully!!!");
-      console.log(response.data.data);
+      toast.success("Product Added Successfully!!!");
+      
     } catch (error) {
       console.log(error);
-      alert(error.response.data.message);
+      toast.error(error.response.data.data);
     }
   };
 

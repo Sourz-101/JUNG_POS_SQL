@@ -41,8 +41,8 @@ const Level3 = () => {
         <IoArrowBackSharp size={35} className="text-[#175CD3]" />
       </Link>
       <div className="flex w-[60vw] justify-center items-center p-5">
-        <TimeLine title={series} isLast={false} />
-        <TimeLine title={category} isLast={false} />
+        <TimeLine title={`Sereis ${series}`} isLast={false} />
+        <TimeLine title={`Category ${category}`} isLast={false} />
         <TimeLine title={"Select Color"} isLast={true} />
       </div>
 

@@ -85,6 +85,14 @@ const EditProduct = () => {
   const handleUpdate= async()=>{
     console.log(currSeries, currCategory, currColor, currName)
 
+    
+    if (
+      [currSeries, currCategory, currColor, currName].some((field)=>field==="")
+    ) {
+      toast.error("All fields are required!! and stock can't be 0");
+      return;
+    }
+
     try {
       const response= await axios.post("http://localhost:9000/api/jung/v1/products/updateproduct",{
         prod_id: _id, prod_name:currName, cat_id:currCategory, ser_id: currSeries, col_id: currColor, photo:currPhoto
@@ -100,7 +108,7 @@ const EditProduct = () => {
       toast.success("Product updated successfully!!")
       fetchProdcutData();
     } catch (error) {
-      alert("error in updating product!!!")
+      toast.error(error.response.data.data)
       console.log(error);
     }
   }

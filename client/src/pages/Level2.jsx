@@ -40,7 +40,7 @@ const Level2 = () => {
         <IoArrowBackSharp size={35} className="text-[#175CD3]" />
       </Link>
       <div className="flex w-[60vw] justify-center items-center p-5">
-        <TimeLine title={series} isLast={false} />
+        <TimeLine title={`Series ${series}`} isLast={false} />
         <TimeLine title={"Select Category"} isLast={true} />
       </div>
 

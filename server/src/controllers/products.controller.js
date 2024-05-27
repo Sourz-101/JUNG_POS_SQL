@@ -58,24 +58,55 @@ const addCDProduct = asyncHandler(async (req, res) => {
   // const photo = await uploadOnCloudinary(photoLocalPath);
   // console.log(photo);
 
-  const query = `INSERT INTO product (prod_name, series_id, category_id, color_id, stock, archive, user_id, photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
-
-  connection.query(
-    query,
-    [prod_name, ser_id, cat_id, col_id, stock, archive, user_id, "xyz.jpg"],
-    (error, result) => {
+  connection.execute(
+    "SELECT * FROM product WHERE prod_name = ?",
+    [prod_name],
+    async (error, results) => {
       if (error) {
-        throw new ApiError(
-          500,
-          "Something went wrong in adding product!!!",
-          error
+        console.error("An error occurred:", error);
+        throw new ApiError(500, error);
+      }
+      console.log(results);
+
+      if (results.length > 0) {
+        return res
+          .status(500)
+          .json(new ApiResponse(501, "product already exist with same name!!"));
+      } else {
+        // Insert the new product
+        const query = `INSERT INTO product (prod_name, series_id, category_id, color_id, stock, archive, user_id, photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+
+        connection.execute(
+          query,
+          [
+            prod_name,
+            ser_id,
+            cat_id,
+            col_id,
+            stock,
+            archive,
+            user_id,
+            "xyz.jpg",
+          ],
+          (error, result) => {
+            if (error) {
+              console.error("An error occurred:", error);
+              throw new ApiError(
+                500,
+                "Something went wrong in adding product!!!",
+                error
+              );
+            }
+
+            console.log(result);
+            return res
+              .status(201)
+              .json(
+                new ApiResponse(201, result, "Product added successfully!!!")
+              );
+          }
         );
       }
-
-      console.log(result);
-      return res
-        .status(201)
-        .json(new ApiResponse(201, result, "Product added successfully!!!"));
     }
   );
 });
@@ -472,19 +503,35 @@ const updateProductQuantity = asyncHandler(async (req, res) => {
 const updateProduct = asyncHandler(async (req, res) => {
   const { prod_id, prod_name, cat_id, ser_id, col_id } = req.body;
   console.log(prod_id, prod_name, cat_id, ser_id, col_id);
-  const query = `
+
+  connection.execute(
+    "SELECT * FROM product WHERE prod_name = ?",
+    [prod_name],
+    async (error, results) => {
+      if (error) {
+        console.error("An error occurred:", error);
+        throw new ApiError(500, error);
+      }
+      console.log(results);
+
+      if (results.length > 0) {
+        return res
+          .status(500)
+          .json(new ApiResponse(501, "product already exist with same name!!"));
+      } else {
+        const query = `
     select * from product where prod_id = ${prod_id}
   `;
 
-  connection.query(query, (error, result) => {
-    if (error)
-      throw new ApiError(500, "Something went worng in finding product");
+        connection.query(query, (error, result) => {
+          if (error)
+            throw new ApiError(500, "Something went worng in finding product");
 
-    console.log(result);
+          console.log(result);
 
-    const product = result[0];
+          const product = result[0];
 
-    const updateQuery = `
+          const updateQuery = `
     UPDATE product 
     SET 
         prod_name = ${prod_name ? `'${prod_name}'` : `'${product.prod_name}'`},
@@ -495,55 +542,64 @@ const updateProduct = asyncHandler(async (req, res) => {
         prod_id = '${prod_id}'
 `;
 
-    connection.query(updateQuery, (error, results) => {
-      if (error)
-        throw new ApiError(
-          500,
-          "Something went worng in updating product!!",
-          error
-        );
+          connection.query(updateQuery, (error, results) => {
+            if (error)
+              throw new ApiError(
+                500,
+                "Something went worng in updating product!!",
+                error
+              );
 
-      console.log(results);
+            console.log(results);
 
-      return res
-        .status(200)
-        .json(new ApiResponse(201, results, "Got the product"));
-    });
+            return res
+              .status(200)
+              .json(new ApiResponse(201, results, "Got the product"));
+          });
+        });
+      }
+    }
+  );
+});
+
+const addSeries = asyncHandler(async (req, res) => {
+  const { ser_name } = req.body;
+
+  const query = `insert into series (ser_name) values (?)`;
+
+  connection.query(query, [ser_name], (error, result) => {
+    if (error) throw new ApiError(500, "Error in genrating the sereis", error);
+
+    return res
+      .status(200)
+      .json(new ApiResponse(201, result, "added category sussfully!!"));
   });
 });
+const addCategory = asyncHandler(async (req, res) => {
+  const { cat_name } = req.body;
 
-const addSeries= asyncHandler(async(req, res)=>{
-  const {ser_name}= req.body;
+  const query = `insert into category (cat_name) values (?)`;
 
-  const query= `insert into series (ser_name) values (?)`;
+  connection.query(query, [cat_name], (error, result) => {
+    if (error) throw new ApiError(500, "Error in genrating the sereis", error);
 
-  connection.query(query,[ser_name],(error, result)=>{
-    if(error) throw new ApiError(500, "Error in genrating the sereis", error);
-
-    return res.status(200).json(new ApiResponse(201, result, "added category sussfully!!"));
-  })
+    return res
+      .status(200)
+      .json(new ApiResponse(201, result, "added category sussfully!!"));
+  });
 });
-const addCategory= asyncHandler(async(req, res)=>{
-  const {cat_name}= req.body;
+const addColor = asyncHandler(async (req, res) => {
+  const { col_name } = req.body;
 
-  const query= `insert into category (cat_name) values (?)`;
+  const query = `insert into color (col_name) values (?)`;
 
-  connection.query(query,[cat_name],(error, result)=>{
-    if(error) throw new ApiError(500, "Error in genrating the sereis", error);
+  connection.query(query, [col_name], (error, result) => {
+    if (error) throw new ApiError(500, "Error in genrating the sereis", error);
 
-    return res.status(200).json(new ApiResponse(201, result, "added category sussfully!!"));
-  })
-});
-const addColor= asyncHandler(async(req, res)=>{
-  const {col_name}= req.body;
-
-  const query= `insert into color (col_name) values (?)`;
-
-  connection.query(query,[col_name],(error, result)=>{
-    if(error) throw new ApiError(500, "Error in genrating the sereis", error);
-
-    return res.status(200).json(new ApiResponse(201, result, "added category sussfully!!"));
-  })
+    return res
+      .status(200)
+      .json(new ApiResponse(201, result, "added category sussfully!!"));
+  });
 });
 
 export {
@@ -562,5 +618,5 @@ export {
   updateProduct,
   addCategory,
   addSeries,
-  addColor
+  addColor,
 };

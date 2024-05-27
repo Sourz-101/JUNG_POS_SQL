@@ -4,8 +4,12 @@ import cookieParser from "cookie-parser";
 import homeRouter from "./routes/home.routes.js";
 import userRouter from "./routes/user.routes.js";
 import prodcutsRouter from './routes/products.routes.js'
-const app = express();
+import path from 'path';
+import bodyParser from "body-parser";
 
+const app = express();
+const __dirname= path.resolve();
+app.use(bodyParser.json());
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -23,4 +27,9 @@ app.use("/api", homeRouter);
 app.use("/api/jung/v1/user", userRouter);
 app.use("/api/jung/v1/products", prodcutsRouter);
 
+
+app.use(express.static(path.join(__dirname, "/client/dist")));
+app.get('*',(req,res)=>{
+  res.sendFile(path.join(__dirname, "client", "dist", "index.html"))
+})
 export { app };
