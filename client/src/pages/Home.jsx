@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { IoAddOutline } from "react-icons/io5";
 
 const Home = () => {
   const [text, setText] = useState("");
@@ -61,7 +62,7 @@ const Home = () => {
       id="cont"
       onClick={() => setText("")}
     >
-    {text==='' ? <Link to={`/addproduct`} className="fixed top-10 right-10 text-xl font-semibold bg-[#1470EF] cursor-pointer hover:bg-blue-700 text-white p-2 rounded-lg"> + Add Product</Link> : ""}
+    {text==='' ? <Link to={`/addproduct`} className="fixed flex top-10 right-10 text-xl font-semibold bg-[#1470EF] cursor-pointer hover:bg-blue-700 text-white p-2 rounded-lg"> <IoAddOutline size={30}/> Add Product</Link> : ""}
       {/* <SearchBar/> */}
       {
         <input
