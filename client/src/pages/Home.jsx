@@ -108,7 +108,7 @@ const Home = () => {
               </Link>
             );
           }) : <div className="w-full bg-white rounded-sm flex justify-around items-center p-2 border-2 cursor-pointer hover:bg-slate-100">
-                 {!loading ? "No Related Product Found!" : <span className="loading loading-bars loading-sm"></span>} 
+                 {!loading ? "No Related Product Found!" : <span className="loading loading-bars loading-lg"></span>} 
                 </div>}
         </div>
       ) : (
