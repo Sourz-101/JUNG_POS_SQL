@@ -5,6 +5,8 @@ import { Link, useParams } from "react-router-dom";
 import { MdEdit } from "react-icons/md";
 import toast from "react-hot-toast";
 import { FaCheck } from "react-icons/fa6";
+import { set } from "mongoose";
+
 
 const ProdcutView = () => {
   const { _id, series, category, color } = useParams();
@@ -12,6 +14,7 @@ const ProdcutView = () => {
   const [product, setProdcut] = useState({});
   const [quantity, setQuantity] = useState(0);
   const [qty, setQty] = useState(0);
+  const [loader, setLoader] = useState(false);
 
   const [currentStockEditable, setCurrentStockEditable] = useState(false);
 
@@ -38,8 +41,10 @@ const ProdcutView = () => {
 
   // Function to update the product quantity
   const updateProductQuantity = async (num) => {
+    setLoader(true);
     // If newly updated quantity is same as the current quantity then return
     if (num === quantity) {
+      setLoader(false);
       return;
     }
 
@@ -53,12 +58,14 @@ const ProdcutView = () => {
       if (!response) throw new Error("Can't update Quantity!!");
 
       console.log(response.data.data);
+      setLoader(false);
 
       toast.success("Quantity Updated Successfully!!!");
       // alert("Quantity Updated Successfully!!");
       setQty(0);
       fetchProdcutData();
     } catch (error) {
+      setLoader(false);
       console.log(error);
     }
   };
@@ -111,7 +118,18 @@ const ProdcutView = () => {
                 : "border-transparent"
             }`}
             value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
+            onChange={(e) => {
+              let str=(e.target.value).toString()
+              console.log(str[str.length-1])
+              if(str.length > 1 ){
+              setQuantity(str[str.length-1] ? e.target.value.replace(/[eE]/g, '') :  quantity);
+              }else {
+                if(str[0]!=undefined)
+                  setQuantity(e.target.value)
+                else setQuantity(quantity)
+              }
+              
+            }}
             readOnly={!currentStockEditable}
           />
         </div>
@@ -137,7 +155,7 @@ const ProdcutView = () => {
           className="btn border text-4xl w-20 h-20 bg-[#1470EF] hover:bg-blue-800 rounded-md text-white font-bold"
           onClick={() => updateProductQuantity(Number(quantity - qty))}
         >
-          -
+          {loader ? (<span className="loading loading-spinner text-info"></span>) : (" - ")}
         </button>
         <input
           className="no-spinners border-2 rounded-md h-20 text-3xl font-bold w-48 flex justify-center items-center bg-[#d0e9ff] text-center"
@@ -154,7 +172,7 @@ const ProdcutView = () => {
           className="btn border text-4xl w-20 h-20 bg-[#1470EF] hover:bg-blue-800 rounded-md text-white font-bold"
           onClick={() => updateProductQuantity(Number(quantity) + Number(qty))}
         >
-          +
+          {loader ? (<span className="loading loading-spinner text-info"></span>) : (" + ")}
         </button>
       </div>
 
