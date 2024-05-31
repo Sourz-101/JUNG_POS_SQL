@@ -17,7 +17,7 @@ const AddCategory = () => {
             return;
         }
         const response = await axios.post(
-          "http://localhost:9000/api/jung/v1/products/addcategory",
+          "https://jung-pos-sql.onrender.com/api/jung/v1/products/addcategory",
           { cat_name: newCategory },
           {
             withCredentials: true,

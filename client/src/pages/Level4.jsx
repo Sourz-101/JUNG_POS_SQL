@@ -13,7 +13,7 @@ const Level4 = () => {
     const fetchSeries = async () => {
       try {
         const res = await axios.post(
-          "http://localhost:9000/api/jung/v1/products/getfinalproductlist",
+          "https://jung-pos-sql.onrender.com/api/jung/v1/products/getfinalproductlist",
           { series_id: series, category_id:category, color_id:color },
           { withCredentials: true }
         );

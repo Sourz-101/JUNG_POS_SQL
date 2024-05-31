@@ -43,7 +43,7 @@ const AddProduct = () => {
   const fetchSeries = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:9000/api/jung/v1/products/getallseries",
+        "https://jung-pos-sql.onrender.com/api/jung/v1/products/getallseries",
         { withCredentials: true }
       );
 
@@ -58,7 +58,7 @@ const AddProduct = () => {
   const fetchCategories = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:9000/api/jung/v1/products/getallcategories",
+        "https://jung-pos-sql.onrender.com/api/jung/v1/products/getallcategories",
         { withCredentials: true }
       );
 
@@ -72,7 +72,7 @@ const AddProduct = () => {
   const fetchColors = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:9000/api/jung/v1/products/getallcolors",
+        "https://jung-pos-sql.onrender.com/api/jung/v1/products/getallcolors",
         { withCredentials: true }
       );
 
@@ -103,7 +103,7 @@ const AddProduct = () => {
         return;
       }
       const response = await axios.post(
-        "http://localhost:9000/api/jung/v1/products/addcdproduct",
+        "https://jung-pos-sql.onrender.com/api/jung/v1/products/addcdproduct",
         input,
         { withCredentials: true }
       );

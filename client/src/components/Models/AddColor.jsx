@@ -18,7 +18,7 @@ const AddColor = () => {
         }
         try {
             console.log("fetchin...")
-          const response= await axios.post("http://localhost:9000/api/jung/v1/products/addcolor",{col_name:newColor},{
+          const response= await axios.post("https://jung-pos-sql.onrender.com/api/jung/v1/products/addcolor",{col_name:newColor},{
             withCredentials:true
           })
     

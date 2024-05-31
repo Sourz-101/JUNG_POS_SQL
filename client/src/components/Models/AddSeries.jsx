@@ -18,7 +18,7 @@ const AddSeries = () => {
     }
     try {
       const response = await axios.post(
-        "http://localhost:9000/api/jung/v1/products/addseries",
+        "https://jung-pos-sql.onrender.com/api/jung/v1/products/addseries",
         { ser_name: newSeries },
         {
           withCredentials: true,
