@@ -11,7 +11,7 @@ const Level1 = () => {
     const fetchSeries = async () => {
       try {
         const res = await axios.get(
-          "https://jung-pos-sql.onrender.com/api/jung/v1/products/getallseries",
+          "http://localhost:9000/api/jung/v1/products/getallseries",
           { withCredentials: true }
         );
 

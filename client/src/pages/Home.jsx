@@ -13,7 +13,7 @@ const Home = () => {
       console.log("fetching...");
 
       const response = await axios.post(
-        "https://jung-pos-sql.onrender.com/api/jung/v1/products/searchproducts",
+        "http://localhost:9000/api/jung/v1/products/searchproducts",
         { inputText: text },
         {
           headers: {

@@ -16,11 +16,11 @@ const ProdcutView = () => {
   const [currentStockEditable, setCurrentStockEditable] = useState(false);
 
   // Initial Fetching of the product data
-  // https://jung-pos-sql.onrender.com/api/jung/v1/products/getproductbyid/663dfadfb3162e8be41281d0a
+  // http://localhost:9000/api/jung/v1/products/getproductbyid/663dfadfb3162e8be41281d0a
   const fetchProdcutData = async () => {
     try {
       const response = await axios.get(
-        `https://jung-pos-sql.onrender.com/api/jung/v1/products/getproductbyid/${_id}`
+        `http://localhost:9000/api/jung/v1/products/getproductbyid/${_id}`
       );
 
       if (!response) throw new Error("Cat get the response...");
@@ -46,7 +46,7 @@ const ProdcutView = () => {
 
     try {
       const response = await axios.post(
-        "https://jung-pos-sql.onrender.com/api/jung/v1/products/updateproductquantity",
+        "http://localhost:9000/api/jung/v1/products/updateproductquantity",
         { quantity: num, product_id: _id },
         { withCredentials: true }
       );

@@ -22,7 +22,7 @@ const EditProduct = () => {
   const deleteProduct= async()=>{
     try {
       const res = await axios.post(
-        `https://jung-pos-sql.onrender.com/api/jung/v1/products/deleteproduct`,{prod_id:_id}, {withCredentials:true}
+        `http://localhost:9000/api/jung/v1/products/deleteproduct`,{prod_id:_id}, {withCredentials:true}
       );
 
       if (!res) throw new Error("Error in fetching series!!");
@@ -38,7 +38,7 @@ const EditProduct = () => {
   const fetchProdcutData = async () => {
     try {
       const response = await axios.get(
-        `https://jung-pos-sql.onrender.com/api/jung/v1/products/getproductbyid/${_id}`
+        `http://localhost:9000/api/jung/v1/products/getproductbyid/${_id}`
       );
 
       if (!response) throw new Error("Cat get the response...");
@@ -58,7 +58,7 @@ const EditProduct = () => {
   const fetchSeries = async () => {
     try {
       const res = await axios.get(
-        "https://jung-pos-sql.onrender.com/api/jung/v1/products/getallseries",
+        "http://localhost:9000/api/jung/v1/products/getallseries",
         { withCredentials: true }
       );
 
@@ -73,7 +73,7 @@ const EditProduct = () => {
   const fetchCategories = async () => {
     try {
       const res = await axios.get(
-        "https://jung-pos-sql.onrender.com/api/jung/v1/products/getallcategories",
+        "http://localhost:9000/api/jung/v1/products/getallcategories",
         { withCredentials: true }
       );
 
@@ -87,7 +87,7 @@ const EditProduct = () => {
   const fetchColors = async () => {
     try {
       const res = await axios.get(
-        "https://jung-pos-sql.onrender.com/api/jung/v1/products/getallcolors",
+        "http://localhost:9000/api/jung/v1/products/getallcolors",
         { withCredentials: true }
       );
 
@@ -110,7 +110,7 @@ const EditProduct = () => {
     }
 
     try {
-      const response= await axios.post("https://jung-pos-sql.onrender.com/api/jung/v1/products/updateproduct",{
+      const response= await axios.post("http://localhost:9000/api/jung/v1/products/updateproduct",{
         prod_id: _id, prod_name:currName, cat_id:currCategory, ser_id: currSeries, col_id: currColor, photo:currPhoto
       }, {
         withCredentials:true
