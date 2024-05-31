@@ -18,20 +18,30 @@ const EditProduct = () => {
   const [allSeries, setAllSeries] = useState([]);
   const [allCategory, setAllCategory] = useState([]);
   const [allColor, setAllColor] = useState([]);
+  const [loader, setLoader]=useState(false);
   const navigate= useNavigate();
   const deleteProduct= async()=>{
     try {
+      if (!confirm("Are you sure want to delete porduct?")) {
+        return;
+      }
+      setLoader(true);
       const res = await axios.post(
         `https://jung-pos-sql.onrender.com/api/jung/v1/products/deleteproduct`,{prod_id:_id}, {withCredentials:true}
       );
 
       if (!res) throw new Error("Error in fetching series!!");
       console.log(res.data.data);
-      toast.success('product deleted succeffully');
-      navigate('/');
+      toast.success('Product deleted successffully');
+      setLoader(false);
+      setTimeout(()=>{
+        navigate('/');
+      },500)
+      
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.data);
+      setLoader(false);
     }
   }
 
@@ -98,6 +108,8 @@ const EditProduct = () => {
       console.log(error);
     }
   };
+
+  const [loading, setLoading]=useState(false);
   const handleUpdate= async()=>{
     console.log(currSeries, currCategory, currColor, currName)
 
@@ -110,6 +122,10 @@ const EditProduct = () => {
     }
 
     try {
+      if (!confirm("Are you sure want to edit porduct?")) {
+        return;
+      }
+      setLoading(true);
       const response= await axios.post("https://jung-pos-sql.onrender.com/api/jung/v1/products/updateproduct",{
         prod_id: _id, prod_name:currName, cat_id:currCategory, ser_id: currSeries, col_id: currColor, photo:currPhoto
       }, {
@@ -123,9 +139,12 @@ const EditProduct = () => {
       // alert("Prodcut updated successfully");
       toast.success("Product updated successfully!!")
       fetchProdcutData();
+    
     } catch (error) {
       toast.error(error.response.data.data)
       console.log(error);
+    } finally{
+      setLoading(false);
     }
   }
 
@@ -150,14 +169,14 @@ const EditProduct = () => {
         <IoArrowBackSharp size={35} className="text-[#175CD3]" />
       </Link>
 
-        <div className="flex fixed right-10 top-10 justify-center items-center gap-5 bg-green-600 text-white p-3 rounded-lg cursor-pointer hover:bg-green-700" onClick={handleUpdate}>
-          Save <FaCheck />
-        </div>
-
+      {!loading ? <div className="flex fixed right-10 top-10 justify-center items-center gap-5 bg-green-600 text-white p-3 rounded-lg cursor-pointer hover:bg-green-700" onClick={handleUpdate}>
+        Save <FaCheck />
+      </div> : <span className="flex fixed right-10 top-10 justify-center items-center gap-5 bg-green-600  p-3 rounded-lg cursor-pointer hover:bg-green-700 loading loading-spinner text-primary"></span>}
+{ !loader ? 
         <div className="flex fixed right-10 top-24 justify-center items-center gap-5 bg-red-600 text-white p-3 rounded-lg cursor-pointer hover:bg-red-700" onClick={deleteProduct}>
           Delete Product 
-        </div>
-
+        </div> : <span className="flex fixed right-10 top-24 justify-center items-center gap-5 bg-red-600  p-3 rounded-lg cursor-pointer hover:bg-red-700 loading loading-spinner text-error"></span>
+}
         <img
           src={currPhoto}
           alt="prodcut_image"
