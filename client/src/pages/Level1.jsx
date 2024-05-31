@@ -41,7 +41,20 @@ const Level1 = () => {
 
       {series.length === 0 ? <span className="loading loading-spinner text-info size-20 mt-20"></span> : ""}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-center justify-center text-white text-2xl font-bold">
+      {/* <div className="flex gap-4 items-center justify-center text-white text-2xl font-bold">
+        {series?.map((item, index) => {
+          return (
+            <Link
+              to={`/select/${item.ser_id}`}
+              className="rounded-md bg-[#1849A8] p-3 m-2 w-full text-center"
+              key={item.series_id}
+            >
+              <div onClick={handleOption}>{item.ser_name}</div>
+            </Link>
+          );
+        })}
+      </div> */}
+      <div className={`${ series.length < 3 ? ("flex ") : ("grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3") } gap-4 items-center justify-center text-white text-2xl font-bold`}>
         {series?.map((item, index) => {
           return (
             <Link

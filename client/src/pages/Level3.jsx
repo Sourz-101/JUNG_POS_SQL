@@ -48,7 +48,7 @@ const Level3 = () => {
 
       {color.length === 0 ? <span className="loading loading-spinner text-info size-20 mt-20"></span> : ""}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-center justify-center text-white text-2xl font-bold">
+      <div className={`${ color.length < 3 ? ("flex") : ("grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3") } gap-4 items-center justify-center text-white text-2xl font-bold`}>
         {color?.map((item, index) => {
           return (
             <Link
