@@ -514,7 +514,7 @@ const updateProduct = asyncHandler(async (req, res) => {
       }
       console.log(results);
 
-      if (results.length > 0) {
+      if (results.length > 1) {
         return res
           .status(500)
           .json(new ApiResponse(501, "product already exist with same name!!"));

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FaCheck } from "react-icons/fa6";
 import { IoArrowBackSharp } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AddSeries from "../components/Models/AddSeries.jsx";
 import AddCategory from "../components/Models/AddCategory.jsx";
 import AddColor from "../components/Models/AddColor.jsx";
@@ -25,10 +25,12 @@ const AddProduct = () => {
   const [allCategory, setAllCategory] = useState([]);
   const [allColor, setAllColor] = useState([]);
 
-  const [newSeries, setNewSeries]= useState('');
-  const [newCategory, setNewCategory]=useState('');
-  const [newColor, setNewColor]=useState('');
+  const [newSeries, setNewSeries] = useState("");
+  const [newCategory, setNewCategory] = useState("");
+  const [newColor, setNewColor] = useState("");
+  const [loader, setLoader] = useState(false);
 
+  const navigate = useNavigate();
   const handleImageChange = () => {
     const file = input.photo;
     if (file) {
@@ -89,32 +91,36 @@ const AddProduct = () => {
     console.log(input);
 
     if (
-      [input.prod_name,
-      input.cat_id,
-      input.ser_id,
-      input.col_id].some((field)=>field?.trim()==="")
+      [input.prod_name, input.cat_id, input.ser_id, input.col_id].some(
+        (field) => field?.trim() === ""
+      )
     ) {
       toast.error("All fields are required!! and stock can't be 0");
       return;
     }
 
     try {
-      if(!confirm("Are you sure want to add porduct?")){
+      if (!confirm("Are you sure want to add porduct?")) {
         return;
       }
+      setLoader(true)
       const response = await axios.post(
         "https://jung-pos-sql.onrender.com/api/jung/v1/products/addcdproduct",
         input,
         { withCredentials: true }
       );
-      if (!response.data.data )
+      if (!response.data.data)
         throw new Error("Something went wrong in adding the product!!!");
 
       toast.success("Product Added Successfully!!!");
-      
+      setLoader(false)
+      setTimeout(() => {
+        navigate("/");
+      }, 500);
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.data);
+      setLoader(false)
     }
   };
 
@@ -139,12 +145,16 @@ const AddProduct = () => {
           <IoArrowBackSharp size={35} className="text-[#175CD3]" />
         </Link>
 
-        <div
-          className="flex fixed right-4 top-5 justify-center items-center gap-5 bg-green-600 text-white p-3 rounded-lg cursor-pointer hover:bg-green-700"
-          onClick={handleSubmit}
-        >
-          ADD <FaCheck />
-        </div>
+        {!loader ? (
+          <div
+            className="flex fixed right-4 top-5 justify-center items-center gap-5 bg-green-600 text-white p-3 rounded-lg cursor-pointer hover:bg-green-700"
+            onClick={handleSubmit}
+          >
+            ADD <FaCheck />
+          </div>
+        ) : (
+          <span className="flex fixed right-4 top-5 justify-center items-center gap-5 bg-green-600  p-3 rounded-lg cursor-pointer hover:bg-green-700 loading loading-spinner text-primary"></span>
+        )}
 
         {/* Image Input */}
         <div className="w-full md:w-1/3 h-fit flex flex-col justify-center items-start md:items-center sm:items-center gap-5">
@@ -193,8 +203,8 @@ const AddProduct = () => {
                 value={input.ser_id}
                 onChange={(e) => setInput({ ...input, ser_id: e.target.value })}
                 className="w-40 p-2"
-              > 
-                <option value=''>Series</option>
+              >
+                <option value="">Series</option>
                 {allSeries?.map((e) => {
                   return (
                     <option key={e.ser_id} value={e.ser_id}>
@@ -203,9 +213,16 @@ const AddProduct = () => {
                   );
                 })}
               </select>
-              
-              <button className="btn bg-green-600 text-white z-40 w-20 p-1" onClick={()=>document.getElementById('add_series').showModal()}>+ New</button>
-              <AddSeries/>
+
+              <button
+                className="btn bg-green-600 text-white z-40 w-20 p-1"
+                onClick={() =>
+                  document.getElementById("add_series").showModal()
+                }
+              >
+                + New
+              </button>
+              <AddSeries />
 
               <label className="w-full flex gap-4 items-center justify-start">
                 <p>Select Category : </p>
@@ -225,9 +242,15 @@ const AddProduct = () => {
                   );
                 })}
               </select>
-              <button className="btn bg-green-600 text-white z-40 w-20" onClick={()=>document.getElementById('add_category').showModal()}>+ New</button>
-                <AddCategory/>
-
+              <button
+                className="btn bg-green-600 text-white z-40 w-20"
+                onClick={() =>
+                  document.getElementById("add_category").showModal()
+                }
+              >
+                + New
+              </button>
+              <AddCategory />
 
               <label className="w-full flex gap-4 items-center justify-start">
                 <p>Select Color : </p>
@@ -247,8 +270,13 @@ const AddProduct = () => {
                   );
                 })}
               </select>
-              <button className="btn bg-green-600 text-white z-40 w-20 p-1" onClick={()=>document.getElementById('add_color').showModal()}>+ New</button>
-                <AddColor/>
+              <button
+                className="btn bg-green-600 text-white z-40 w-20 p-1"
+                onClick={() => document.getElementById("add_color").showModal()}
+              >
+                + New
+              </button>
+              <AddColor />
               <label className="w-full flex gap-4 items-center justify-start">
                 <p>Enter Stock Quantity : </p>
               </label>
