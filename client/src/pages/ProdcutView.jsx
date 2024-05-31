@@ -100,7 +100,7 @@ const ProdcutView = () => {
       <p className="text-3xl font-bold p-2">{product.prod_name}</p>
 
       {/* Current Stock */}
-      <div className="flex w-96 justify-between items-center text-black ">
+      <div className="flex w-96 justify-between items-center text-black gap-4">
         <div className="flex justify-center items-center text-xl font-semibold border-gray-500 rounded-lg w-80 gap-2 p-4 bg-[#d0e9ff] h-20">
           <p>Current Stock : </p>
           <input
