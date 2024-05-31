@@ -118,7 +118,6 @@ const AddProduct = () => {
     }
   };
 
-
   useEffect(() => {
     fetchSeries();
     fetchCategories();
@@ -127,6 +126,12 @@ const AddProduct = () => {
   useEffect(() => {
     handleImageChange();
   }, [input.photo]);
+
+
+
+
+
+
   return (
     <div className="w-full h-full ">
       <div className="bg-[#F9FDFF] w-full  h-screen p-5 flex items-center justify-center flex-col md:flex-row lg:flex-row gap-3 ">
