@@ -25,6 +25,7 @@ const AddColor = () => {
           if(!response.data.data) throw new Error("Something went worng in adding new color");
     
           toast.success("New color added");
+          window.location.reload();
           console.log(response.data.data);
         } catch (error) {
           toast.error(error.response.data.data);
