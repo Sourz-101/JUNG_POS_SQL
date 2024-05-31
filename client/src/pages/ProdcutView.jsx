@@ -38,7 +38,6 @@ const ProdcutView = () => {
 
   // Function to update the product quantity
   const updateProductQuantity = async (num) => {
-
     // If newly updated quantity is same as the current quantity then return
     if (num === quantity) {
       return;
@@ -67,7 +66,7 @@ const ProdcutView = () => {
   const handleEditButton = () => {
     setCurrentStockEditable(!currentStockEditable);
     updateProductQuantity(Number(quantity));
-  }
+  };
 
   return (
     <div className="bg-[#F9FDFF] w-full max-h-screen h-screen p-5 flex items-center justify-center flex-col gap-3 overflow-hidden">
@@ -82,10 +81,15 @@ const ProdcutView = () => {
         <IoArrowBackSharp size={35} className="text-[#175CD3]" />
       </Link>
 
-        
-      
-      <Link to={series && category && color ? `/select/${series}/${category}/${color}/${_id}/editproduct` : `/${_id}/editproduct`} className="flex fixed right-10 top-10 justify-center items-center gap-5 bg-[#1470EF] text-white p-3 rounded-lg cursor-pointer hover:bg-blue-700" >
-        Edit Product <MdEdit size={20}/>
+      <Link
+        to={
+          series && category && color
+            ? `/select/${series}/${category}/${color}/${_id}/editproduct`
+            : `/${_id}/editproduct`
+        }
+        className="flex fixed right-10 top-10 justify-center items-center gap-5 bg-[#1470EF] text-white p-3 rounded-lg cursor-pointer hover:bg-blue-700"
+      >
+        Edit Product <MdEdit size={20} />
       </Link>
       <img
         src={product.photo}
@@ -98,10 +102,10 @@ const ProdcutView = () => {
       {/* Current Stock */}
       <div className="flex w-96 justify-between items-center text-black ">
         <div className="flex justify-center items-center text-xl font-semibold border-gray-500 rounded-lg w-80 gap-2 p-4 bg-[#d0e9ff] h-20">
-          <p>Current Stock :  </p>
+          <p>Current Stock : </p>
           <input
-            type="text"
-            className={`border-2 rounded-md h-20 text-3xl font-bold w-24 flex justify-center items-center bg-[#d0e9ff] text-center ${
+            type="number"
+            className={`no-spinners border-2 rounded-md h-20 text-3xl font-bold w-24 flex justify-center items-center bg-[#d0e9ff] text-center ${
               currentStockEditable
                 ? "px-2 bg-[#f9fdff] h-16 w-20"
                 : "border-transparent"
@@ -111,12 +115,19 @@ const ProdcutView = () => {
             readOnly={!currentStockEditable}
           />
         </div>
-        <button className={`btn ${!currentStockEditable ? "bg-[#1470EF] hover:bg-blue-800": "bg-green-600 hover:bg-green-700" } text-xl h-20 w-20`}
+        <button
+          className={`btn ${
+            !currentStockEditable
+              ? "bg-[#1470EF] hover:bg-blue-800"
+              : "bg-green-600 hover:bg-green-700"
+          } text-xl h-20 w-20`}
           onClick={handleEditButton}
         >
-        {currentStockEditable ? <FaCheck size={30} className="text-white"/> : <MdEdit size={30} className="text-white"/>}
-          
-          
+          {currentStockEditable ? (
+            <FaCheck size={30} className="text-white" />
+          ) : (
+            <MdEdit size={30} className="text-white" />
+          )}
         </button>
       </div>
 
@@ -129,9 +140,15 @@ const ProdcutView = () => {
           -
         </button>
         <input
-          className="border-2 rounded-md h-20 text-3xl font-bold w-48 flex justify-center items-center bg-[#d0e9ff] text-center"
+          className="no-spinners border-2 rounded-md h-20 text-3xl font-bold w-48 flex justify-center items-center bg-[#d0e9ff] text-center"
           value={qty}
-          onChange={(e) => setQty(e.target.value)}
+          type="number"
+          onChange={(e) => {
+            if (!e.target.value.includes("e")) {
+              setQty(e.target.value);
+            }
+          }}
+          onClick={(e) => (e.target.value = " ")}
         />
         <button
           className="btn border text-4xl w-20 h-20 bg-[#1470EF] hover:bg-blue-800 rounded-md text-white font-bold"

@@ -69,13 +69,13 @@ const Home = () => {
           type="text"
           value={text}
           onChange={(e) => setText(e.target.value)}
-          className="transition-all duration-500 m-5 p-2 border-2 border-[#1849A8] rounded-lg w-60 text-black text-center"
+          className="transition-all duration-500 m-5 p-2 border-2 border-[#1849A8] rounded-lg w-60 text-black text-center z-5"
           id="input"
           placeholder="Search Product"
         />
       }
       {text != "" ? (
-        <div className="result relative shadow-sm shadow-black w-[1100px]  rounded-lg overflow-y-auto overflow-x-hidden -top-14">
+        <div className="result relative shadow-sm shadow-black w-[1100px]  rounded-lg overflow-y-auto overflow-x-hidden top-14">
           {resustantData?.map((e) => {
             return (
               <Link to={`/product/${e.prod_id}`} key={e.prod_id}>

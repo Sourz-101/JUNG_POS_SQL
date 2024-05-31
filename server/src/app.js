@@ -10,24 +10,26 @@ import bodyParser from "body-parser";
 const app = express();
 const __dirname = path.resolve();
 app.use(bodyParser.json());
-const allowedOrigins = ["http://localhost:5173", "https://jung-pos-sql.onrender.com"];
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Origin not allowed by CORS"));
-      }
-    },
-  })
-);
 
 
-// app.use(cors({
-//   origin:"http://localhost:5173",
-//   credentials:true
-// }))
+// const allowedOrigins = ["http://localhost:5173", "https://jung-pos-sql.onrender.com"];
+// app.use(
+//   cors({
+//     origin: function (origin, callback) {
+//       if (!origin || allowedOrigins.includes(origin)) {
+//         callback(null, true);
+//       } else {
+//         callback(new Error("Origin not allowed by CORS"));
+//       }
+//     },
+//   })
+// );
+
+
+app.use(cors({
+  origin:"http://localhost:5173",
+  credentials:true
+}))
 
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
