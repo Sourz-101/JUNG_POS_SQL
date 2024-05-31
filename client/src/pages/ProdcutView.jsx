@@ -7,7 +7,6 @@ import toast from "react-hot-toast";
 import { FaCheck } from "react-icons/fa6";
 import { set } from "mongoose";
 
-
 const ProdcutView = () => {
   const { _id, series, category, color } = useParams();
 
@@ -118,17 +117,13 @@ const ProdcutView = () => {
                 : "border-transparent"
             }`}
             value={quantity}
+            onKeyPress={(e) => {
+            if (!/[0-9]/.test(e.key)) {
+              e.preventDefault();
+            }
+          }}
             onChange={(e) => {
-              let str=(e.target.value).toString()
-              console.log(str[str.length-1])
-              if(str.length > 1 ){
-              setQuantity(str[str.length-1] ? e.target.value.replace(/[eE]/g, '') :  quantity);
-              }else {
-                if(str[0]!=undefined)
-                  setQuantity(e.target.value)
-                else setQuantity(quantity)
-              }
-              
+              setQuantity(e.target.value);
             }}
             readOnly={!currentStockEditable}
           />
@@ -155,16 +150,23 @@ const ProdcutView = () => {
           className="btn border text-4xl w-20 h-20 bg-[#1470EF] hover:bg-blue-800 rounded-md text-white font-bold"
           onClick={() => updateProductQuantity(Number(quantity - qty))}
         >
-          {loader ? (<span className="loading loading-spinner text-info"></span>) : (" - ")}
+          {loader ? (
+            <span className="loading loading-spinner text-info"></span>
+          ) : (
+            " - "
+          )}
         </button>
         <input
           className="no-spinners border-2 rounded-md h-20 text-3xl font-bold w-48 flex justify-center items-center bg-[#d0e9ff] text-center"
           value={qty}
           type="number"
-          onChange={(e) => {
-            if (!e.target.value.includes("e")) {
-              setQty(e.target.value);
+          onKeyPress={(e) => {
+            if (!/[0-9]/.test(e.key)) {
+              e.preventDefault();
             }
+          }}
+          onChange={(e) => {
+            setQty(e.target.value);
           }}
           onClick={(e) => (e.target.value = " ")}
         />
@@ -172,7 +174,11 @@ const ProdcutView = () => {
           className="btn border text-4xl w-20 h-20 bg-[#1470EF] hover:bg-blue-800 rounded-md text-white font-bold"
           onClick={() => updateProductQuantity(Number(quantity) + Number(qty))}
         >
-          {loader ? (<span className="loading loading-spinner text-info"></span>) : (" + ")}
+          {loader ? (
+            <span className="loading loading-spinner text-info"></span>
+          ) : (
+            " + "
+          )}
         </button>
       </div>
 
@@ -188,3 +194,4 @@ const ProdcutView = () => {
 };
 
 export default ProdcutView;
+// COmment
